@@ -515,15 +515,44 @@
   /* App store badges */
   .app-badges {
     display: flex;
-    gap: 10px;
+    gap: 12px;
+    margin-top: 16px;
     flex-wrap: wrap;
+    max-width: 440px;
     justify-content: center;
   }
-  .app-badges a {
-    transition: opacity 0.2s;
+  .app-badge-wrap {
+    position: relative;
+    display: inline-flex;
+    opacity: 0.65;
+    filter: grayscale(0.3);
+    transition: all 0.2s;
   }
-  .app-badges a:hover {
-    opacity: 0.85 !important;
+  .app-badge-wrap:hover {
+    opacity: 0.85;
+    filter: grayscale(0);
+  }
+  .app-badge-wrap .badge-coming {
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    background: var(--primary);
+    color: #fff;
+    font-size: 10px;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 20px;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+    white-space: nowrap;
+    box-shadow: 0 2px 6px rgba(79,70,229,0.3);
+  }
+  .app-badge-wrap img {
+    height: 44px;
+    border-radius: 6px;
+  }
+  .footer .app-badge-wrap img {
+    height: 36px;
   }
 
   /* Hero signup */
@@ -1042,7 +1071,16 @@
         Free 14 hari bila launch · RM49/bln · Batal bila-bila
       </p>
 
-    </div>
+      <div class="app-badges">
+        <a href="#" class="app-badge-wrap" onclick="return false" title="Android app akan datang">
+          <img src="https://postsaja.com/google-play-badge.svg" alt="Google Play" loading="lazy">
+          <span class="badge-coming">Akan datang</span>
+        </a>
+        <a href="#" class="app-badge-wrap" onclick="return false" title="iOS app akan datang">
+          <img src="https://postsaja.com/app-store-badge.svg" alt="App Store" loading="lazy">
+          <span class="badge-coming">Akan datang</span>
+        </a>
+      </div>
       <div id="hero-msg"></div>
     </div>
 
@@ -1260,11 +1298,13 @@
   <p class="text-xs">WhatsApp: <a href="https://wa.me/60132465974" style="color:var(--primary);text-decoration:none;">6013-246 5974</a></p>
   <p class="text-xs" style="margin-top:4px;">© 2026 · Dibina untuk SME Malaysia</p>
   <div class="app-badges" style="max-width:100%;justify-content:center;margin-top:12px;">
-    <a href="#" onclick="return false" title="Android app akan datang" style="opacity:0.6;">
-      <img src="https://postsaja.com/google-play-badge.png" alt="Google Play" style="height:38px;" loading="lazy">
+    <a href="#" class="app-badge-wrap" onclick="return false" title="Android app akan datang">
+      <img src="https://postsaja.com/google-play-badge.svg" alt="Google Play" style="height:36px;" loading="lazy">
+      <span class="badge-coming" style="font-size:8px;padding:1px 6px;">Akan datang</span>
     </a>
-    <a href="#" onclick="return false" title="iOS app akan datang" style="opacity:0.6;">
-      <img src="https://postsaja.com/app-store-badge.svg" alt="App Store" style="height:38px;" loading="lazy">
+    <a href="#" class="app-badge-wrap" onclick="return false" title="iOS app akan datang">
+      <img src="https://postsaja.com/app-store-badge.svg" alt="App Store" style="height:36px;" loading="lazy">
+      <span class="badge-coming" style="font-size:8px;padding:1px 6px;">Akan datang</span>
     </a>
   </div>
 </footer>
