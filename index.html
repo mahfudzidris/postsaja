@@ -14,6 +14,7 @@
  gtag('config', 'G-F3Y07VGC9B');
 </script>
 
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%234F46E5' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M22 2L11 13'/%3E%3Cpath d='M22 2l-7 20-4-9-9-4 20-7z'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -75,6 +76,9 @@
     color: var(--text-main);
     text-decoration: none;
     letter-spacing: -0.02em;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
   }
   .nav-logo .logo-gradient {
     background: var(--gradient);
@@ -881,7 +885,10 @@
 <!-- ===== NAVIGATION ===== -->
 <nav class="nav" id="nav">
   <div class="container">
-    <a href="#" class="nav-logo">Post<span class="logo-gradient">Saja</span></a>
+    <a href="#" class="nav-logo">
+      <i data-lucide="send" style="width:20px;height:20px;stroke-width:2;color:var(--primary);flex-shrink:0;"></i>
+      Post<span class="logo-gradient">Saja</span>
+    </a>
     <ul class="nav-links" id="navLinks">
       <li><a href="#how">Cara kerja</a></li>
       <li><a href="#platforms">Platform</a></li>
