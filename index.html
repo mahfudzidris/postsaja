@@ -2,7 +2,7 @@
 <html lang="ms">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>PostSaja — Marketing untuk yang tak sempat marketing</title>
 
 <!-- SEO Meta -->
@@ -518,7 +518,7 @@
     gap: 10px;
     max-width: 440px;
   }
-  .hero-signup .input-field { flex: 1; }
+  .hero-signup .input-field { flex: 1; font-size: 16px; }
   .signup-note {
     font-size: 12px;
     color: #94A3B8;
@@ -971,6 +971,7 @@
   .cta-section .cta-form .input-field {
     flex: 1;
     min-width: 200px;
+    font-size: 16px;
   }
 
   /* ===== Footer ===== */
@@ -1432,18 +1433,6 @@
       link.addEventListener('click', () => navLinks.classList.remove('open'));
     });
   }
-
-    form.addEventListener('submit', async (e) => {
-      e.preventDefault();
-      const email = form.querySelector('.input-field').value;
-      const msg = document.getElementById('hero-msg');
-      if (!email) return;
-      msg.style.display = 'block';
-      msg.className = 'success';
-      msg.textContent = '✅ Dah masuk! Kami akan email bila PostSaja siap.';
-      form.querySelector('.input-field').value = '';
-    });
-  });
 
   // Intersection Observer for fade-in
   const observer = new IntersectionObserver((entries) => {
