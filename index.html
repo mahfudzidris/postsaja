@@ -1400,7 +1400,7 @@
       btn.innerHTML = '⏳ Sebentar...';
 
       try {
-        const res = await fetch('/subscribe.php', {
+        const res = await fetch('https://postsaja.com/subscribe.php', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ email })
