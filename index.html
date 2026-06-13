@@ -512,6 +512,36 @@
   }
   .plat-badge i { color: var(--primary); }
 
+  /* App store badges */
+  .app-badges {
+    display: flex;
+    gap: 10px;
+    margin-top: 16px;
+    flex-wrap: wrap;
+    max-width: 440px;
+  }
+  .app-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 18px;
+    background: var(--text-main);
+    color: #fff;
+    border-radius: var(--radius-sm);
+    font-size: 13px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.2s;
+    opacity: 0.6;
+    cursor: default;
+  }
+  .app-badge i { color: #fff; }
+  .app-badge .badge-label { display: flex; flex-direction: column; line-height: 1.2; }
+  .app-badge .badge-label small { font-size: 9px; font-weight: 400; opacity: 0.7; text-transform: uppercase; letter-spacing: 0.04em; }
+  .app-badge .badge-label strong { font-size: 14px; font-weight: 700; }
+  .app-badge.badge-live { opacity: 1; cursor: pointer; }
+  .app-badge.badge-live:hover { transform: translateY(-2px); opacity: 0.9; }
+
   /* Hero signup */
   .hero-signup {
     display: flex;
@@ -1027,6 +1057,23 @@
       <p class="signup-note">
         Free 14 hari bila launch · RM49/bln · Batal bila-bila
       </p>
+
+      <div class="app-badges">
+        <span class="app-badge">
+          <i data-lucide="smartphone" style="width:20px;height:20px;stroke-width:2;"></i>
+          <span class="badge-label">
+            <small>Akan datang</small>
+            <strong>App Android</strong>
+          </span>
+        </span>
+        <span class="app-badge">
+          <i data-lucide="apple" style="width:20px;height:20px;stroke-width:2;"></i>
+          <span class="badge-label">
+            <small>Akan datang</small>
+            <strong>App iOS</strong>
+          </span>
+        </span>
+      </div>
       <div id="hero-msg"></div>
     </div>
 
@@ -1243,6 +1290,22 @@
   <p class="text-xs" style="margin-top:8px;">Garden Square, Gamuda Gardens, 48050 Rawang, Selangor Darul Ehsan</p>
   <p class="text-xs">WhatsApp: <a href="https://wa.me/60132465974" style="color:var(--primary);text-decoration:none;">6013-246 5974</a></p>
   <p class="text-xs" style="margin-top:4px;">© 2026 · Dibina untuk SME Malaysia</p>
+  <div class="app-badges" style="max-width:100%;justify-content:center;margin-top:12px;">
+    <span class="app-badge" style="background:#1f2937;">
+      <i data-lucide="smartphone" style="width:16px;height:16px;stroke-width:2;"></i>
+      <span class="badge-label">
+        <small>Akan datang</small>
+        <strong>Android</strong>
+      </span>
+    </span>
+    <span class="app-badge" style="background:#1f2937;">
+      <i data-lucide="apple" style="width:16px;height:16px;stroke-width:2;"></i>
+      <span class="badge-label">
+        <small>Akan datang</small>
+        <strong>iOS</strong>
+      </span>
+    </span>
+  </div>
 </footer>
 
 <script>
