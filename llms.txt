@@ -1,0 +1,27 @@
+# PostSaja
+
+> Marketing automatik untuk SME Malaysia.  
+> AI generate content dan post ke semua platform — cukup dengan gambar kerja harian.
+
+## About
+
+PostSaja helps small business owners automate their marketing. Instead of spending hours creating captions, hashtags, and posting to multiple platforms manually, business owners just upload their daily work photos and PostSaja handles everything — from AI content generation to auto-posting across channels.
+
+## Core Features
+
+- **AI Content Generation**: Auto-generates captions, hashtags, and design from photos
+- **Multi-Platform Auto-Post**: Google Business Profile, Facebook, Instagram, WhatsApp Status + Broadcast, TikTok, YouTube
+- **Auto Retention**: Follow-up reminders to bring back repeat customers
+- **Zero Skill Required**: No design, copywriting, or scheduling needed
+
+## Pricing
+
+- **Starter**: RM29/mo — Google Business + Facebook, 30 posts
+- **Pro**: RM49/mo — All platforms, 90 posts, WhatsApp Status + Broadcast
+- **Multi**: RM99/mo — All platforms, unlimited, multi-location
+
+## Links
+
+- Website: https://postsaja.com
+- Contact: Garden Square, Gamuda Gardens, 48050 Rawang, Selangor Darul Ehsan
+- WhatsApp: https://wa.me/60132465974
