@@ -101,7 +101,6 @@
 <link rel="dns-prefetch" href="https://unpkg.com">
 <link rel="preload" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" as="style">
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<script src="https://unpkg.com/lucide@latest" defer></script>
 <style>
   /* ===== Design Tokens ===== */
   :root {
@@ -1286,9 +1285,11 @@
     observer.observe(el);
   });
 
-  // Init Lucide icons
-  if (typeof lucide !== 'undefined') lucide.createIcons();
 </script>
+
+<script src="https://unpkg.com/lucide@latest"></script>
+<script>
+  if (typeof lucide !== 'undefined') lucide.createIcons();
 
 </body>
 </html>
