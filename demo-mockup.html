@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>PostSaja — Demo Mockup</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+body {
+  font-family:'Plus Jakarta Sans', sans-serif;
+  background:linear-gradient(135deg, #EEF2FF, #F8FAFC, #F5F3FF);
+  min-height:100vh;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  padding:20px;
+}
+.container { max-width:400px; width:100%; }
+h1 {
+  font-size:22px; font-weight:800; color:#0F172A;
+  text-align:center; margin:12px 0 4px;
+}
+h1 span { background:linear-gradient(135deg,#4F46E5,#7C3AED); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
+.sub { font-size:13px; color:#64748B; text-align:center; margin-bottom:16px; }
+
+/* Phone frame */
+.phone {
+  background:#000; border-radius:30px; padding:10px;
+  box-shadow:0 12px 40px rgba(0,0,0,0.15),0 4px 12px rgba(0,0,0,0.1);
+  position:relative; overflow:hidden;
+}
+.phone-notch {
+  position:absolute; top:0; left:50%; transform:translateX(-50%);
+  width:120px; height:22px; background:#000; border-radius:0 0 14px 14px;
+  z-index:10;
+}
+.phone-screen {
+  background:#fff; border-radius:24px; overflow:hidden; min-height:650px;
+  position:relative;
+}
+/* WA Header */
+.wa-header {
+  background:#075E54; color:#fff; padding:36px 16px 12px;
+  display:flex; align-items:center; gap:10px;
+}
+.wa-avatar {
+  width:36px; height:36px; border-radius:50%;
+  background:linear-gradient(135deg,#4F46E5,#7C3AED);
+  display:flex; align-items:center; justify-content:center;
+  font-size:14px; font-weight:700; color:#fff;
+}
+.wa-header h2 { font-size:15px; font-weight:600; }
+.wa-header p { font-size:11px; opacity:0.8; }
+
+/* Chat area */
+.chat-area { padding:12px; height:420px; overflow-y:auto; position:relative; }
+.chat-date {
+  text-align:center; font-size:11px; color:#94A3B8; margin:8px 0 16px;
+}
+.bubble { max-width:85%; padding:10px 14px; border-radius:16px; font-size:13px; line-height:1.5; margin-bottom:8px; position:relative; animation:slideIn 0.4s ease-out forwards; opacity:0; }
+.bubble.staff { background:#DCF8C6; align-self:flex-end; margin-left:auto; border-bottom-right-radius:4px; }
+.bubble.bot { background:#F1F5F9; align-self:flex-start; border-bottom-left-radius:4px; }
+.bubble.bot-last { background:#E0E7FF; border:1px solid #C7D2FE; }
+.bubble img { width:100%; border-radius:12px; margin-bottom:6px; }
+.bubble .time { font-size:10px; color:#94A3B8; text-align:right; margin-top:4px; }
+.bubble .tik { color:#34B7F1; }
+.chat-area { display:flex; flex-direction:column; }
+@keyframes slideIn {
+  0% { opacity:0; transform:translateY(10px); }
+  100% { opacity:1; transform:translateY(0); }
+}
+.typing {
+  display:flex; align-items:center; gap:4px; padding:12px 16px;
+  background:#F1F5F9; border-radius:16px; max-width:80px;
+  align-self:flex-start; margin-bottom:8px; animation:slideIn 0.3s ease-out forwards; opacity:0;
+}
+.typing span { width:7px; height:7px; background:#94A3B8; border-radius:50%; animation:bounce 1.4s infinite; }
+.typing span:nth-child(2) { animation-delay:0.2s; }
+.typing span:nth-child(3) { animation-delay:0.4s; }
+@keyframes bounce { 0%,60%,100%{transform:translateY(0)} 30%{transform:translateY(-6px)} }
+
+/* WA Input bar */
+.wa-input {
+  display:flex; align-items:center; gap:8px; padding:8px 12px;
+  background:#F8FAFC; border-top:1px solid #E2E8F0; position:sticky; bottom:0;
+}
+.wa-input input {
+  flex:1; border:none; outline:none; padding:8px 14px; border-radius:20px;
+  background:#fff; font-size:14px; font-family:inherit; border:1px solid #E2E8F0;
+}
+
+/* Result cards */
+.result-section { padding:12px; display:none; }
+.result-section.show { display:block; }
+.result-card {
+  background:linear-gradient(135deg,#EEF2FF,#F5F3FF);
+  border:1px solid #C7D2FE; border-radius:12px; padding:12px; margin-top:8px;
+}
+.result-card h4 { font-size:13px; font-weight:600; color:#4F46E5; margin-bottom:4px; }
+.result-card p { font-size:12px; color:#475569; }
+.plat-mini {
+  display:flex; gap:4px; flex-wrap:wrap; margin-top:6px;
+}
+.plat-mini span {
+  font-size:10px; padding:2px 8px; border-radius:10px; background:#E0E7FF; color:#4F46E5; font-weight:600;
+}
+
+/* Controls */
+.controls { display:flex; gap:8px; margin-top:16px; justify-content:center; flex-wrap:wrap; }
+.btn {
+  padding:10px 20px; border:none; border-radius:12px; font-weight:600; font-size:13px;
+  cursor:pointer; font-family:inherit; transition:all 0.2s;
+}
+.btn-primary { background:linear-gradient(135deg,#4F46E5,#7C3AED); color:#fff; }
+.btn-primary:hover { transform:translateY(-2px); opacity:0.9; }
+.btn-outline { background:#fff; border:1.5px solid #E2E8F0; color:#475569; }
+.btn-outline:hover { border-color:#4F46E5; color:#4F46E5; }
+.btn:disabled { opacity:0.5; cursor:default; transform:none; }
+
+.step-indicator { display:flex; gap:6px; justify-content:center; margin-bottom:12px; }
+.step-dot { width:8px; height:8px; border-radius:50%; background:#CBD5E1; transition:all 0.3s; }
+.step-dot.active { background:#4F46E5; width:24px; border-radius:4px; }
+.step-dot.done { background:#22C55E; }
+
+.auto-text { font-size:11px; color:#94A3B8; text-align:center; margin-top:4px; }
+
+@media(max-width:480px) {
+  .phone { border-radius:20px; }
+  .phone-screen { min-height:600px; }
+  .chat-area { height:360px; }
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+  <h1>Demo: <span>PostSaja</span> 🤖</h1>
+  <p class="sub">Klik "Mula Demo" — tengok workflow automatik</p>
+
+  <div class="phone">
+    <div class="phone-notch"></div>
+    <div class="phone-screen" id="phoneScreen">
+      <!-- WA Header -->
+      <div class="wa-header">
+        <div class="wa-avatar">PS</div>
+        <div>
+          <h2>PostSaja Bot</h2>
+          <p>AI Marketing Assistant</p>
+        </div>
+      </div>
+
+      <!-- Chat Area -->
+      <div class="chat-area" id="chatArea">
+        <div class="chat-date">Hari ini</div>
+      </div>
+
+      <!-- WA Input -->
+      <div class="wa-input" id="waInput" style="display:none;">
+        <input type="text" placeholder="Taip mesej..." disabled>
+      </div>
+
+      <!-- Result Section -->
+      <div class="result-section" id="resultSection">
+        <div style="margin-top: 4px; margin-bottom: 4px;">
+          <div class="step-indicator" id="stepIndicator">
+            <span class="step-dot" data-step="1"></span>
+            <span class="step-dot" data-step="2"></span>
+            <span class="step-dot" data-step="3"></span>
+            <span class="step-dot" data-step="4"></span>
+          </div>
+        </div>
+        <div id="resultCard"></div>
+        <p class="auto-text">Auto-pilot by PostSaja AI</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="controls">
+    <button class="btn btn-primary" id="btnStart" onclick="startDemo()">▶ Mula Demo</button>
+    <button class="btn btn-outline" id="btnReset" onclick="resetDemo()">⟳ Reset</button>
+  </div>
+</div>
+
+<script>
+const chatArea = document.getElementById('chatArea');
+const resultSection = document.getElementById('resultSection');
+const resultCard = document.getElementById('resultCard');
+const stepDots = document.querySelectorAll('.step-dot');
+const btnStart = document.getElementById('btnStart');
+const messages = [
+  {
+    type: 'staff',
+    img: true,
+    text: 'Servis tayar + minyak hitam — Perodua Myvi 2019',
+    time: '2:32 PTG'
+  },
+  {
+    type: 'bot',
+    text: '📸 Gambar diterima!',
+    time: '2:32 PTG'
+  },
+  {
+    type: 'typing'
+  },
+  {
+    type: 'bot',
+    text: '✅ Siap! AI dah generate caption & target platform. Post dalam 5 minit.',
+    time: '2:33 PTG',
+    tik: true
+  },
+  {
+    type: 'bot',
+    text: '📊 Ringkasan: 4 platform · 3x reach anggaran · 2 orang nampak',
+    time: '2:33 PTG',
+    tik: true,
+    last: true
+  }
+];
+
+let step = 0;
+let isRunning = false;
+
+function addBubble(type, content) {
+  const div = document.createElement('div');
+  div.className = `bubble ${type}`;
+  if (content.img) {
+    div.innerHTML = `<div style="background:linear-gradient(135deg,#E0E7FF,#F5F3FF);border-radius:12px;padding:16px;text-align:center;font-size:28px;">🔧🚗</div><div style="margin-top:4px;">${content.text}</div><div class="time">${content.time}</div>`;
+  } else if (content.last) {
+    div.style.background = '#E0E7FF';
+    div.style.border = '1px solid #C7D2FE';
+    div.innerHTML = `${content.text}<div class="time">${content.time} <span class="tik">✓✓</span></div>`;
+  } else {
+    div.innerHTML = `${content.text}<div class="time">${content.time}${content.tik ? ' <span class="tik">✓✓</span>' : ''}</div>`;
+  }
+  chatArea.appendChild(div);
+}
+
+function addTyping() {
+  const div = document.createElement('div');
+  div.className = 'typing';
+  div.innerHTML = '<span></span><span></span><span></span>';
+  chatArea.appendChild(div);
+  return div;
+}
+
+function scrollChat() {
+  chatArea.scrollTop = chatArea.scrollHeight;
+}
+
+function updateStep(stepIndex) {
+  stepDots.forEach((dot, i) => {
+    dot.className = 'step-dot';
+    if (i < stepIndex) dot.classList.add('done');
+    else if (i === stepIndex) dot.classList.add('active');
+  });
+}
+
+async function startDemo() {
+  if (isRunning) return;
+  isRunning = true;
+  btnStart.disabled = true;
+  resultSection.classList.remove('show');
+  resultSection.style.display = 'none';
+
+  // STEP 0: Staff sends photo
+  await sleep(600);
+  addBubble('staff', messages[0]);
+  scrollChat();
+  updateStep(0);
+
+  // STEP 1: Bot receives
+  await sleep(1000);
+  addBubble('bot', messages[1]);
+  scrollChat();
+  updateStep(1);
+
+  // STEP 2: Typing indicator
+  await sleep(800);
+  const typing = addTyping();
+  scrollChat();
+  updateStep(2);
+
+  // STEP 3: AI Processing
+  await sleep(2500);
+  typing.remove();
+  addBubble('bot', messages[3]);
+  scrollChat();
+  updateStep(3);
+
+  // STEP 4: Summary + Result card
+  await sleep(1500);
+  updateStep(4);
+  addBubble('bot', messages[4]);
+  scrollChat();
+
+  // Show result card
+  await sleep(800);
+  resultSection.style.display = 'block';
+  resultSection.classList.add('show');
+  resultCard.innerHTML = `
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+      <h4>✅ Auto-posted</h4>
+      <span style="font-size:20px;">📊</span>
+    </div>
+    <div class="plat-mini" style="margin-bottom:8px;">
+      <span>📰 Google Business</span>
+      <span>📘 Facebook</span>
+      <span>📷 Instagram</span>
+      <span>💬 WhatsApp Status</span>
+    </div>
+    <div style="display:flex;gap:16px;font-size:12px;color:#475569;">
+      <div><strong style="color:#0F172A;">15</strong> 👍 Likes</div>
+      <div><strong style="color:#0F172A;">89</strong> 👀 Views</div>
+      <div><strong style="color:#0F172A;">4</strong> 💬 Baru</div>
+    </div>
+    <div style="margin-top:8px;padding-top:8px;border-top:1px solid #C7D2FE;font-size:11px;color:#94A3B8;">
+      📈 +3x reach berbanding tak posting · Auto-retention hantar reminder esok
+    </div>
+  `;
+
+  isRunning = false;
+  btnStart.textContent = '▶ Main Semula';
+  btnStart.disabled = false;
+}
+
+function resetDemo() {
+  isRunning = false;
+  btnStart.disabled = false;
+  btnStart.textContent = '▶ Mula Demo';
+  
+  // Clear chat
+  chatArea.innerHTML = '<div class="chat-date">Hari ini</div>';
+  
+  // Hide result
+  resultSection.classList.remove('show');
+  resultSection.style.display = 'none';
+  resultCard.innerHTML = '';
+  
+  // Reset steps
+  stepDots.forEach(d => d.className = 'step-dot');
+}
+
+function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
+</script>
+</body>
+</html>
