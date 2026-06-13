@@ -879,42 +879,98 @@
 
   /* ===== Final CTA ===== */
   .cta-section {
-    background: linear-gradient(135deg, #312E81, #1E1B4B);
-    padding: 80px 0;
     position: relative;
+    padding: 80px 0 100px;
     overflow: hidden;
+    background: linear-gradient(135deg, #EEF2FF 0%, #F8FAFC 25%, #F5F3FF 50%, #F8FAFC 75%, #E0E7FF 100%);
+    background-size: 300% 300%;
+    animation: heroGradient 15s ease-in-out infinite alternate;
+    text-align: center;
+  }
+  .cta-section::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+    background-image: radial-gradient(circle at center, #94A3B8 1.5px, transparent 1.5px);
+    background-size: 24px 24px;
+    opacity: 0.4;
+  }
+  .cta-section::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+    background:
+      radial-gradient(ellipse at 20% 20%, rgba(79,70,229,0.08) 0%, transparent 50%),
+      radial-gradient(ellipse at 80% 80%, rgba(124,58,237,0.08) 0%, transparent 50%);
   }
   .cta-orb-1, .cta-orb-2 {
     position: absolute;
     border-radius: 50%;
     pointer-events: none;
+    z-index: 0;
   }
   .cta-orb-1 {
-    width: 400px; height: 400px;
-    background: radial-gradient(circle, rgba(79,70,229,0.20), transparent 70%);
-    top: -150px; right: -100px;
-    filter: blur(80px);
+    width: 500px; height: 500px;
+    background: radial-gradient(circle, rgba(79,70,229,0.25), transparent 70%);
+    top: -200px; right: -150px;
+    filter: blur(100px);
+    animation: orbFloat1 10s ease-in-out infinite alternate;
   }
   .cta-orb-2 {
-    width: 300px; height: 300px;
-    background: radial-gradient(circle, rgba(124,58,237,0.15), transparent 70%);
-    bottom: -100px; left: -80px;
-    filter: blur(60px);
+    width: 400px; height: 400px;
+    background: radial-gradient(circle, rgba(124,58,237,0.2), transparent 70%);
+    bottom: -180px; left: -180px;
+    filter: blur(100px);
+    animation: orbFloat2 12s ease-in-out infinite alternate;
   }
   .cta-section .container {
     position: relative;
     z-index: 1;
     text-align: center;
   }
+  .cta-section .cta-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 14px;
+    background: var(--primary-light);
+    color: var(--primary);
+    font-size: 13px;
+    font-weight: 600;
+    border-radius: var(--radius-full);
+    margin-bottom: 20px;
+  }
+  .cta-section .cta-badge .dot {
+    width: 6px; height: 6px;
+    background: var(--accent);
+    border-radius: 50%;
+    animation: pulse-dot 2s ease-in-out infinite;
+  }
   .cta-section h2 {
-    color: #fff;
-    margin-bottom: 12px;
+    color: var(--text-main);
+    margin-bottom: 8px;
   }
   .cta-section p {
-    color: #A5B4FC;
+    color: var(--text-light);
     font-size: 17px;
     max-width: 480px;
-    margin: 0 auto 32px;
+    margin: 0 auto 28px;
+  }
+  .cta-section .cta-form {
+    display: flex;
+    gap: 10px;
+    max-width: 420px;
+    margin: 0 auto;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  .cta-section .cta-form .input-field {
+    flex: 1;
+    min-width: 200px;
   }
 
   /* ===== Footer ===== */
@@ -1226,11 +1282,15 @@
   <div class="cta-orb-1"></div>
   <div class="cta-orb-2"></div>
   <div class="container">
-    <h2>Nak cuba?</h2>
-    <p>Tak perlu commitment. Free 14 hari. Batal bila-bila masa.</p>
-    <form action="#" method="post" style="display:flex; gap:10px; max-width:420px; margin:0 auto; flex-wrap:wrap; justify-content:center;">
-        <input type="email" class="input-field" placeholder="Email" required style="background:rgba(255,255,255,0.08); border-color:rgba(255,255,255,0.15); color:#fff; min-width:200px; flex:1;">
-      <button type="submit" class="btn-primary" style="background:#fff; color:#312E81; box-shadow:none;">
+    <div class="cta-badge">
+      <span class="dot"></span>
+      Nak cuba?
+    </div>
+    <h2>Tak perlu commitment.</h2>
+    <p>Free 14 hari percubaan. Batal bila-bila. Kadar dari RM29/bln.</p>
+    <form class="cta-form" action="#" method="post">
+      <input type="email" class="input-field" placeholder="Email" required aria-label="Email">
+      <button type="submit" class="btn-primary">
         <i data-lucide="megaphone" style="width:16px;height:16px;stroke-width:2;"></i> Saya nak!
       </button>
     </form>
