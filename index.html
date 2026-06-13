@@ -395,8 +395,36 @@
     color: var(--text-muted);
     line-height: 1.6;
     max-width: 480px;
-    margin: 16px 0 32px;
+    margin: 16px 0 24px;
   }
+
+  /* Platform badges row */
+  .hero-platforms {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 28px;
+    max-width: 480px;
+  }
+  .plat-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 14px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-full);
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text-main);
+    transition: all 0.2s;
+  }
+  .plat-badge:hover {
+    border-color: var(--primary);
+    background: var(--primary-light);
+    transform: translateY(-1px);
+  }
+  .plat-badge i { color: var(--primary); }
 
   /* Hero signup */
   .hero-signup {
@@ -820,6 +848,7 @@
     }
     .hero-text { max-width: 100%; text-align: center; }
     .hero .subheadline { margin-left: auto; margin-right: auto; }
+    .hero-platforms { margin-left: auto; margin-right: auto; justify-content: center; }
     .hero-signup { margin: 0 auto; }
     .isometric-card { transform: none; }
     .isometric-card:hover { transform: none; }
@@ -886,10 +915,19 @@
       </h1>
       <h1 style="color: var(--text-main);">Marketing jadi.</h1>
       <p class="subheadline">
-        Hari-hari dah cukup sibuk urus kerja. Nak fikir pasal caption, hashtag, 
-        Google Business, Facebook, TikTok — memang pening. Kini cukup hantar gambar 
-        kerja harian. AI PostSaja uruskan marketing. Post automatik ke semua platform.
+        Hari-hari dah cukup sibuk urus kerja. Nak fikir pasal caption, hashtaga, design — 
+        memang pening. Kini cukup hantar gambar kerja harian. AI PostSaja uruskan 
+        marketing. Post automatik ke semua platform.
       </p>
+
+      <div class="hero-platforms">
+        <span class="plat-badge"><i data-lucide="store" style="width:14px;height:14px;stroke-width:2.5;"></i> Google Business</span>
+        <span class="plat-badge"><i data-lucide="users" style="width:14px;height:14px;stroke-width:2.5;"></i> Facebook</span>
+        <span class="plat-badge"><i data-lucide="camera" style="width:14px;height:14px;stroke-width:2.5;"></i> Instagram</span>
+        <span class="plat-badge"><i data-lucide="message-circle" style="width:14px;height:14px;stroke-width:2.5;"></i> WhatsApp</span>
+        <span class="plat-badge"><i data-lucide="music" style="width:14px;height:14px;stroke-width:2.5;"></i> TikTok</span>
+        <span class="plat-badge"><i data-lucide="play" style="width:14px;height:14px;stroke-width:2.5;"></i> YouTube</span>
+      </div>
 
       <form class="hero-signup" id="signup-form" action="#" method="post">
         <input type="email" class="input-field" id="email" placeholder="Email" required aria-label="Email">
