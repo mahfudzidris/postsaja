@@ -1,0 +1,93 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#EEF2FF"/>
+      <stop offset="50%" stop-color="#F8FAFC"/>
+      <stop offset="100%" stop-color="#F5F3FF"/>
+    </linearGradient>
+    <linearGradient id="brand" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#4F46E5"/>
+      <stop offset="100%" stop-color="#7C3AED"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#4F46E5"/>
+      <stop offset="100%" stop-color="#7C3AED"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1200" height="630" fill="url(#bg)"/>
+
+  <!-- Dot pattern -->
+  <g opacity="0.15">
+    <pattern id="dots" x="0" y="0" width="24" height="24" patternUnits="userSpaceOnUse">
+      <circle cx="12" cy="12" r="1" fill="#94A3B8"/>
+    </pattern>
+    <rect width="1200" height="630" fill="url(#dots)"/>
+  </g>
+
+  <!-- Accent bar top -->
+  <rect width="1200" height="6" fill="url(#accent)"/>
+
+  <!-- Glow orb -->
+  <circle cx="900" cy="200" r="250" fill="url(#brand)" opacity="0.08" filter="url(#blur)"/>
+  <circle cx="300" cy="450" r="200" fill="url(#brand)" opacity="0.06" filter="url(#blur)"/>
+  <defs>
+    <filter id="blur">
+      <feGaussianBlur stdDeviation="60"/>
+    </filter>
+  </defs>
+
+  <!-- Send icon -->
+  <g transform="translate(100, 80)" fill="none" stroke="url(#brand)" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M120 20L60 80"/>
+    <path d="M120 20l-38 108L22 68 120 20z"/>
+  </g>
+
+  <!-- Title -->
+  <text x="600" y="280" font-family="'Plus Jakarta Sans',-apple-system,sans-serif" font-size="72" font-weight="800" fill="#0F172A" text-anchor="middle" letter-spacing="-2">
+    Post
+    <tspan fill="url(#brand)">Saja</tspan>
+  </text>
+
+  <!-- Subtitle -->
+  <text x="600" y="350" font-family="'Plus Jakarta Sans',-apple-system,sans-serif" font-size="26" font-weight="500" fill="#64748B" text-anchor="middle" letter-spacing="-0.3">
+    Marketing untuk yang tak sempat marketing
+  </text>
+
+  <!-- Platform badges bg -->
+  <rect x="300" y="390" width="600" height="60" rx="30" fill="#fff" opacity="0.7"/>
+
+  <!-- Platform badges -->
+  <g transform="translate(340, 412)" fill="none" stroke="#4F46E5" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+    <!-- Store icon -->
+    <rect x="0" y="0" width="30" height="24" rx="3"/>
+    <line x1="5" y1="24" x2="5" y2="30"/><line x1="25" y1="24" x2="25" y2="30"/>
+    <line x1="10" y1="8" x2="20" y2="8"/><line x1="10" y1="14" x2="20" y2="14"/>
+    <!-- Users icon -->
+    <path d="M65 8a6 6 0 11-12 0 6 6 0 0112 0z" stroke="#7C3AED"/>
+    <path d="M80 30c0-6-8-10-18-10S44 24 44 30" stroke="#7C3AED"/>
+    <!-- Camera icon -->
+    <path d="M125 30c0-3-3-6-6-6h-6" stroke="#4F46E5"/>
+    <circle cx="120" cy="20" r="10" stroke="#4F46E5"/>
+    <!-- Message-circle -->
+    <path d="M155 10a10 10 0 0114 14" stroke="#7C3AED"/>
+    <circle cx="160" cy="20" r="13" stroke="#7C3AED"/>
+  </g>
+
+  <!-- Platform text -->
+  <text x="600" y="480" font-family="'Plus Jakarta Sans',-apple-system,sans-serif" font-size="14" font-weight="600" fill="#64748B" text-anchor="middle">
+    Google Business · Facebook · Instagram · WhatsApp · TikTok · YouTube
+  </text>
+
+  <!-- CTA pill -->
+  <rect x="460" y="510" width="280" height="50" rx="25" fill="url(#brand)"/>
+  <text x="600" y="542" font-family="'Plus Jakarta Sans',-apple-system,sans-serif" font-size="18" font-weight="700" fill="#fff" text-anchor="middle">
+    📢 Saya nak!
+  </text>
+
+  <!-- URL -->
+  <text x="600" y="590" font-family="'Plus Jakarta Sans',-apple-system,sans-serif" font-size="14" font-weight="500" fill="#94A3B8" text-anchor="middle">
+    postsaja.com
+  </text>
+</svg>
