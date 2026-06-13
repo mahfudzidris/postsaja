@@ -1070,6 +1070,20 @@
     padding: 0;
   }
   .toast .toast-close:hover { color: var(--text-main); }
+
+  /* Honeypot — invisible to humans */
+  .hp-field {
+    position: absolute;
+    left: -9999px;
+    top: -9999px;
+    opacity: 0;
+    height: 0;
+    width: 0;
+    padding: 0;
+    margin: 0;
+    border: 0;
+  }
+
   @media (max-width: 480px) {
     .toast-container { left: 16px; right: 16px; top: 16px; }
     .toast { max-width: 100%; padding: 16px 18px; }
@@ -1136,7 +1150,9 @@
         <span class="plat-badge"><i data-lucide="play" style="width:14px;height:14px;stroke-width:2.5;"></i> YouTube</span>
       </div>
 
-      <form class="hero-signup" id="signup-form" action="#" method="post">
+      <form class="hero-signup" id="signup-form" action="#" method="post" data-form-id="hero">
+        <!-- Honeypot — humans don't see this -->
+        <input type="text" name="website" class="hp-field" tabindex="-1" autocomplete="off">
         <input type="email" class="input-field" id="email" placeholder="Email" required aria-label="Email">
         <button type="submit" class="btn-primary">
           <i data-lucide="megaphone" style="width:16px;height:16px;stroke-width:2;"></i> Saya nak!
@@ -1350,7 +1366,9 @@
     </div>
     <h2>Tak perlu commitment.</h2>
     <p>Free 14 hari percubaan. Batal bila-bila. Kadar dari RM29/bln.</p>
-    <form class="cta-form" action="#" method="post">
+    <form class="cta-form" action="#" method="post" data-form-id="cta">
+      <!-- Honeypot — humans don't see this -->
+      <input type="text" name="website" class="hp-field" tabindex="-1" autocomplete="off">
       <input type="email" class="input-field" placeholder="Email" required aria-label="Email">
       <button type="submit" class="btn-primary">
         <i data-lucide="megaphone" style="width:16px;height:16px;stroke-width:2;"></i> Saya nak!
@@ -1404,7 +1422,11 @@
         const res = await fetch('https://postsaja.com/subscribe.php', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ email })
+          body: JSON.stringify({
+            email: email,
+            website: form.querySelector('.hp-field').value,
+            t: Date.now()
+          })
         });
         const data = await res.json();
         input.value = '';

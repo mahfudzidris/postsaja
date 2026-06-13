@@ -1,24 +1,21 @@
 <?php
-// subscribe.php — Handle PostSaja email signups (MySQL)
+// subscribe.php — Handle PostSaja email signups (MySQL + bot protection)
 header('Content-Type: application/json');
 header('Access-Control-Allow-Origin: *');
 
-// Database config
 $dbHost = 'localhost';
 $dbUser = 'homesta3_intro_database';
 $dbPass = 'PostSaja@2026';
 $dbName = 'homesta3_intro';
 
-// Connect to MySQL
 $conn = new mysqli($dbHost, $dbUser, $dbPass, $dbName);
-
 if ($conn->connect_error) {
     http_response_code(500);
     echo json_encode(['success' => false, 'message' => 'Ralat server. Cuba lagi nanti.']);
     exit;
 }
 
-// Create subscribers table if not exists
+// Create subscribers table
 $conn->query("CREATE TABLE IF NOT EXISTS postsaja_subscribers (
     id INT AUTO_INCREMENT PRIMARY KEY,
     email VARCHAR(255) NOT NULL UNIQUE,
@@ -27,23 +24,57 @@ $conn->query("CREATE TABLE IF NOT EXISTS postsaja_subscribers (
     ip VARCHAR(45) DEFAULT ''
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4");
 
+// Create rate limit table
+$conn->query("CREATE TABLE IF NOT EXISTS postsaja_rate_limits (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    ip VARCHAR(45) NOT NULL,
+    attempted_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    INDEX idx_ip_time (ip, attempted_at)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4");
+
 // Get JSON input
 $input = json_decode(file_get_contents('php://input'), true);
 
 if (!$input || empty($input['email'])) {
     http_response_code(400);
     echo json_encode(['success' => false, 'message' => 'Sila masukkan email.']);
-    $conn->close();
-    exit;
+    $conn->close(); exit;
 }
 
-$email = filter_var(trim($input['email']), FILTER_VALIDATE_EMAIL);
+// === BOT CHECK 1: Honeypot ===
+if (!empty($input['website'])) {
+    http_response_code(200);
+    echo json_encode(['success' => true, 'message' => 'Tahniah! 🎉 Anda dalam senarai.']); // Fake success to bot
+    $conn->close(); exit;
+}
 
+// === BOT CHECK 2: Rate limit (max 5 per IP per hour) ===
+$ip = $_SERVER['REMOTE_ADDR'] ?? '0.0.0.0';
+$stmt = $conn->prepare("SELECT COUNT(*) as cnt FROM postsaja_rate_limits WHERE ip = ? AND attempted_at > DATE_SUB(NOW(), INTERVAL 1 HOUR)");
+$stmt->bind_param("s", $ip);
+$stmt->execute();
+$result = $stmt->get_result();
+$row = $result->fetch_assoc();
+
+if ($row['cnt'] >= 5) {
+    http_response_code(429);
+    echo json_encode(['success' => false, 'message' => 'Terlalu banyak cubaan. Cuba lagi nanti.']);
+    $stmt->close(); $conn->close(); exit;
+}
+$stmt->close();
+
+// Log this attempt
+$stmt = $conn->prepare("INSERT INTO postsaja_rate_limits (ip) VALUES (?)");
+$stmt->bind_param("s", $ip);
+$stmt->execute();
+$stmt->close();
+
+// Validate email
+$email = filter_var(trim($input['email']), FILTER_VALIDATE_EMAIL);
 if (!$email) {
     http_response_code(400);
     echo json_encode(['success' => false, 'message' => 'Email tak sah. Cuba lagi.']);
-    $conn->close();
-    exit;
+    $conn->close(); exit;
 }
 
 // Check duplicate
@@ -57,19 +88,15 @@ if ($stmt->num_rows > 0) {
         'success' => true,
         'message' => 'Email dah didaftarkan! Kami akan maklumkan bila pelancaran tiba.'
     ]);
-    $stmt->close();
-    $conn->close();
-    exit;
+    $stmt->close(); $conn->close(); exit;
 }
 $stmt->close();
 
-// Insert new subscriber
-$ip = $_SERVER['REMOTE_ADDR'] ?? '';
+// Insert
 $stmt = $conn->prepare("INSERT INTO postsaja_subscribers (email, source, ip) VALUES (?, 'postsaja.com', ?)");
 $stmt->bind_param("ss", $email, $ip);
 
 if ($stmt->execute()) {
-    // Optional: send notification
     @mail('aiagent@postsaja.com', '📩 Signup baru: ' . $email,
         "Email baru: $email\nTarikh: " . date('Y-m-d H:i:s') . "\n\nSource: postsaja.com",
         "From: PostSaja <noreply@postsaja.com>\r\n");
