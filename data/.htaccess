@@ -1,0 +1,4 @@
+# Protect subscriber data
+<Files "subscribers.json">
+    Require all denied
+</Files>
