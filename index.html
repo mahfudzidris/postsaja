@@ -1,0 +1,1106 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PostSaja — Marketing untuk yang tak sempat marketing</title>
+
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-F3Y07VGC9B"></script>
+<script>
+ window.dataLayer = window.dataLayer || [];
+ function gtag(){dataLayer.push(arguments);}
+ gtag('js', new Date());
+ gtag('config', 'G-F3Y07VGC9B');
+</script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/lucide@latest"></script>
+<style>
+  /* ===== Design Tokens ===== */
+  :root {
+    /* Colors */
+    --bg: #F8FAFC;
+    --surface: #FFFFFF;
+    --primary: #4F46E5;
+    --primary-light: #EEF2FF;
+    --secondary: #7C3AED;
+    --text-main: #0F172A;
+    --text-muted: #64748B;
+    --accent: #10B981;
+    --border: #E2E8F0;
+    --gradient: linear-gradient(135deg, #4F46E5, #7C3AED);
+    --gradient-soft: linear-gradient(135deg, #EEF2FF, #F5F3FF);
+
+    /* Typography */
+    --font: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+    --radius-sm: 8px;
+    --radius-md: 12px;
+    --radius-lg: 16px;
+    --radius-full: 9999px;
+
+    /* Shadows */
+    --shadow-card: 0 4px 20px -2px rgba(79, 70, 229, 0.10);
+    --shadow-card-hover: 0 10px 25px -5px rgba(79, 70, 229, 0.15), 0 8px 10px -6px rgba(79, 70, 229, 0.10);
+    --shadow-btn: 0 4px 14px 0 rgba(79, 70, 229, 0.30);
+    --shadow-glow: 0 0 20px rgba(79, 70, 229, 0.35);
+
+    /* Spacing */
+    --section-py: 96px;
+    --section-py-mobile: 64px;
+  }
+
+  /* ===== Navigation ===== */
+  .nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 50;
+    padding: 16px 0;
+    background: rgba(248, 250, 252, 0.80);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(226, 232, 240, 0.50);
+    transition: all 0.2s;
+  }
+  .nav .container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .nav-logo {
+    font-size: 20px;
+    font-weight: 800;
+    color: var(--text-main);
+    text-decoration: none;
+    letter-spacing: -0.02em;
+  }
+  .nav-logo .logo-gradient {
+    background: var(--gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .nav-links {
+    display: flex;
+    align-items: center;
+    gap: 28px;
+    list-style: none;
+  }
+  .nav-links a {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text-muted);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover {
+    color: var(--text-main);
+  }
+  .nav-cta {
+    padding: 8px 20px !important;
+    font-size: 13px !important;
+    color: #fff !important;
+  }
+  .nav-mobile-toggle {
+    display: none;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 8px;
+    color: var(--text-main);
+  }
+  @media (max-width: 768px) {
+    .nav-links { display: none; }
+    .nav-links.open {
+      display: flex;
+      flex-direction: column;
+      position: absolute;
+      top: 100%; left: 0; right: 0;
+      background: rgba(255,255,255,0.98);
+      backdrop-filter: blur(12px);
+      padding: 16px 24px;
+      gap: 16px;
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-mobile-toggle { display: block; }
+  }
+
+  /* Push content below fixed nav */
+  .hero { padding-top: 100px !important; }
+
+  /* ===== Reset & Base ===== */
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: var(--font);
+    background: var(--bg);
+    color: var(--text-main);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    overflow-x: hidden;
+  }
+
+  /* ===== Typography ===== */
+  h1, h2, h3, h4 { line-height: 1.1; letter-spacing: -0.02em; }
+  h1 { font-size: clamp(32px, 6vw, 68px); font-weight: 800; }
+  h2 { font-size: clamp(24px, 3.5vw, 38px); font-weight: 700; }
+  h3 { font-size: clamp(18px, 2vw, 24px); font-weight: 600; }
+  p { color: var(--text-muted); font-size: 16px; line-height: 1.7; }
+  .text-sm { font-size: 13px; color: var(--text-muted); }
+  .text-xs { font-size: 12px; color: var(--text-muted); }
+
+  /* Gradient text */
+  .gradient-text {
+    background: var(--gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  /* ===== Container ===== */
+  .container {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 0 24px;
+  }
+  @media (max-width: 640px) {
+    .container { padding: 0 16px; }
+  }
+
+  /* ===== Section Spacing ===== */
+  section { padding: var(--section-py-mobile) 0; }
+  @media (min-width: 768px) { section { padding: var(--section-py) 0; } }
+
+  /* ===== Buttons ===== */
+  .btn-primary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 12px 28px;
+    background: var(--gradient);
+    color: #fff;
+    font-family: var(--font);
+    font-size: 15px;
+    font-weight: 600;
+    border: none;
+    border-radius: var(--radius-full);
+    cursor: pointer;
+    box-shadow: var(--shadow-btn);
+    transition: all 0.2s ease-out;
+    text-decoration: none;
+    white-space: nowrap;
+  }
+  .btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px 0 rgba(79, 70, 229, 0.40);
+  }
+  .btn-primary:active {
+    transform: translateY(0);
+  }
+
+  .btn-secondary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 12px 28px;
+    background: var(--surface);
+    color: var(--text-main);
+    font-family: var(--font);
+    font-size: 15px;
+    font-weight: 600;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-full);
+    cursor: pointer;
+    transition: all 0.2s ease-out;
+    text-decoration: none;
+    white-space: nowrap;
+  }
+  .btn-secondary:hover {
+    background: #F8FAFC;
+    border-color: #CBD5E1;
+  }
+
+  /* ===== Cards ===== */
+  .card {
+    background: var(--surface);
+    border-radius: var(--radius-md);
+    border: 1px solid #F1F5F9;
+    box-shadow: var(--shadow-card);
+    transition: all 0.2s ease-out;
+  }
+  .card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-card-hover);
+  }
+
+  /* ===== Inputs ===== */
+  .input-field {
+    width: 100%;
+    padding: 12px 18px;
+    font-family: var(--font);
+    font-size: 15px;
+    color: var(--text-main);
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    outline: none;
+    transition: all 0.2s;
+  }
+  .input-field:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.10);
+  }
+  .input-field::placeholder {
+    color: #94A3B8;
+  }
+
+  /* ===== Utility ===== */
+  .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); border: 0; }
+  .text-center { text-align: center; }
+
+  /* ===== HERO ===== */
+  .hero {
+    position: relative;
+    min-height: 85vh;
+    display: flex;
+    align-items: center;
+    padding: 80px 0 60px;
+    overflow: hidden;
+    background: var(--bg);
+  }
+
+  /* Blur orbs */
+  .hero-orb-1, .hero-orb-2 {
+    position: absolute;
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 0;
+  }
+  .hero-orb-1 {
+    width: 500px; height: 500px;
+    background: radial-gradient(circle, rgba(79,70,229,0.15), transparent 70%);
+    top: -200px; right: -100px;
+    filter: blur(80px);
+  }
+  .hero-orb-2 {
+    width: 400px; height: 400px;
+    background: radial-gradient(circle, rgba(124,58,237,0.12), transparent 70%);
+    bottom: -100px; left: -150px;
+    filter: blur(80px);
+  }
+
+  .hero .container {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 48px;
+    align-items: center;
+  }
+
+  /* Hero text */
+  .hero-text { max-width: 600px; }
+  .hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 14px;
+    background: var(--primary-light);
+    color: var(--primary);
+    font-size: 13px;
+    font-weight: 600;
+    border-radius: var(--radius-full);
+    margin-bottom: 28px;
+  }
+  .hero-badge .dot {
+    width: 6px; height: 6px;
+    background: var(--accent);
+    border-radius: 50%;
+    animation: pulse-dot 2s ease-in-out infinite;
+  }
+  @keyframes pulse-dot {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
+  }
+  .hero h1 { margin-bottom: 8px; }
+  .hero h1 .split-gradient {
+    background: var(--gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .hero .subheadline {
+    font-size: clamp(16px, 2vw, 20px);
+    color: var(--text-muted);
+    line-height: 1.6;
+    max-width: 480px;
+    margin: 16px 0 32px;
+  }
+
+  /* Hero signup */
+  .hero-signup {
+    display: flex;
+    gap: 10px;
+    max-width: 440px;
+  }
+  .hero-signup .input-field { flex: 1; }
+  .signup-note {
+    font-size: 12px;
+    color: #94A3B8;
+    margin-top: 12px;
+  }
+  #hero-msg {
+    font-size: 14px;
+    margin-top: 10px;
+    display: none;
+  }
+  #hero-msg.success { color: var(--accent); }
+  #hero-msg.error { color: #EF4444; }
+
+  /* Hero visual — Isometric Card */
+  .hero-visual {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .isometric-wrapper {
+    perspective: 2000px;
+    width: 100%;
+    max-width: 480px;
+  }
+  .isometric-card {
+    background: var(--surface);
+    border-radius: var(--radius-lg);
+    border: 1px solid #F1F5F9;
+    box-shadow: var(--shadow-card);
+    padding: 32px 28px;
+    transform: rotateX(5deg) rotateY(-10deg);
+    transition: transform 0.4s ease-out;
+    position: relative;
+    overflow: hidden;
+  }
+  .isometric-card:hover {
+    transform: rotateX(2deg) rotateY(-6deg);
+  }
+  .isometric-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 4px;
+    background: var(--gradient);
+    border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+  }
+  .iso-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 24px;
+    padding-top: 4px;
+  }
+  .iso-avatar {
+    width: 42px; height: 42px;
+    background: var(--gradient);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-weight: 700;
+    font-size: 14px;
+  }
+  .iso-name { font-weight: 600; font-size: 15px; }
+  .iso-role { font-size: 12px; color: var(--text-muted); }
+
+  .iso-post {
+    background: #F8FAFC;
+    border-radius: var(--radius-sm);
+    padding: 14px;
+    margin-bottom: 14px;
+    border: 1px solid #F1F5F9;
+  }
+  .iso-post-img {
+    width: 100%;
+    height: 120px;
+    background: var(--gradient-soft);
+    border-radius: 6px;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 28px;
+  }
+  .iso-post p { font-size: 13px; color: var(--text-main); line-height: 1.5; }
+  .iso-post small { font-size: 11px; color: var(--text-muted); }
+
+  .iso-stats {
+    display: flex;
+    gap: 12px;
+    margin-top: 16px;
+  }
+  .iso-stat { text-align: center; flex: 1; }
+  .iso-stat strong { display: block; font-size: 13px; color: var(--text-main); }
+  .iso-stat span { font-size: 11px; color: var(--text-muted); }
+
+  /* Floating element */
+  .float-card {
+    position: absolute;
+    bottom: -20px;
+    right: -20px;
+    background: var(--surface);
+    border-radius: var(--radius-md);
+    border: 1px solid #F1F5F9;
+    box-shadow: var(--shadow-card);
+    padding: 14px 18px;
+    animation: float 6s ease-in-out infinite;
+    z-index: 2;
+  }
+  @keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-12px); }
+  }
+  .float-card .label { font-size: 12px; color: var(--text-muted); }
+  .float-card .value { font-size: 18px; font-weight: 700; background: var(--gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+
+  /* ===== How It Works ===== */
+  .how { position: relative; overflow: hidden; }
+  .how-orb {
+    position: absolute;
+    width: 300px; height: 300px;
+    background: radial-gradient(circle, rgba(79,70,229,0.08), transparent 70%);
+    top: 50%; right: -100px;
+    filter: blur(60px);
+    pointer-events: none;
+  }
+  .section-label {
+    display: inline-block;
+    padding: 4px 14px;
+    background: var(--primary-light);
+    color: var(--primary);
+    font-size: 12px;
+    font-weight: 700;
+    border-radius: var(--radius-full);
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+    margin-bottom: 16px;
+  }
+  .section-desc {
+    max-width: 560px;
+    margin: 16px auto 48px;
+    text-align: center;
+  }
+
+  .steps-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+  }
+  @media (max-width: 900px) { .steps-grid { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 540px) { .steps-grid { grid-template-columns: 1fr; } }
+
+  .step-card {
+    background: var(--surface);
+    border-radius: var(--radius-md);
+    border: 1px solid #F1F5F9;
+    box-shadow: var(--shadow-card);
+    padding: 24px;
+    transition: all 0.2s ease-out;
+    position: relative;
+  }
+  .step-card:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-card-hover);
+  }
+  .step-num {
+    width: 48px; height: 48px;
+    background: var(--gradient);
+    border-radius: var(--radius-md);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 18px;
+    color: #fff;
+    margin-bottom: 16px;
+    box-shadow: var(--shadow-glow);
+  }
+  .step-card h3 { margin-bottom: 8px; }
+  .step-card p { font-size: 14px; line-height: 1.6; }
+
+  /* ===== Platforms ===== */
+  .plat-section { background: var(--surface); }
+  .platforms {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
+    max-width: 640px;
+    margin: 0 auto;
+  }
+  .plat {
+    padding: 10px 20px;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-full);
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text-main);
+    transition: all 0.2s;
+  }
+  .plat:hover {
+    border-color: var(--primary);
+    background: var(--primary-light);
+  }
+  .plat.highlight {
+    background: var(--gradient);
+    color: #fff;
+    border-color: transparent;
+  }
+  .plat.highlight:hover {
+    opacity: 0.9;
+  }
+  .plat-legend {
+    display: flex;
+    gap: 24px;
+    justify-content: center;
+    margin-top: 24px;
+    flex-wrap: wrap;
+  }
+  .plat-legend-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 13px;
+    color: var(--text-muted);
+  }
+  .legend-dot { width: 10px; height: 10px; border-radius: 50%; }
+  .legend-dot.normal { background: var(--border); }
+  .legend-dot.gap { background: var(--gradient); }
+
+  /* ===== Pricing ===== */
+  .pricing {
+    position: relative;
+    overflow: hidden;
+  }
+  .pricing-orb {
+    position: absolute;
+    width: 400px; height: 400px;
+    background: radial-gradient(circle, rgba(124,58,237,0.10), transparent 70%);
+    bottom: -150px; right: -100px;
+    filter: blur(80px);
+    pointer-events: none;
+  }
+
+  .pricing-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    max-width: 900px;
+    margin: 0 auto;
+  }
+  @media (max-width: 768px) { .pricing-grid { grid-template-columns: 1fr; max-width: 380px; } }
+
+  .price-card {
+    background: var(--surface);
+    border-radius: var(--radius-lg);
+    border: 1px solid #F1F5F9;
+    box-shadow: var(--shadow-card);
+    padding: 32px 24px;
+    text-align: center;
+    transition: all 0.2s ease-out;
+    position: relative;
+  }
+  .price-card:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-card-hover);
+  }
+  .price-card.featured {
+    border: 2px solid transparent;
+    background-origin: border-box;
+    background-image: linear-gradient(#fff, #fff), var(--gradient);
+    background-clip: padding-box, border-box;
+    transform: scale(1.05);
+    z-index: 2;
+  }
+  @media (max-width: 768px) { .price-card.featured { transform: none; } }
+
+  .price-badge {
+    display: inline-block;
+    padding: 4px 12px;
+    background: var(--gradient);
+    color: #fff;
+    font-size: 11px;
+    font-weight: 700;
+    border-radius: var(--radius-full);
+    margin-bottom: 12px;
+  }
+  .price-tier { font-size: 13px; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.03em; }
+  .price-amount { font-size: 40px; font-weight: 800; margin: 6px 0; }
+  .price-amount span { font-size: 16px; font-weight: 400; color: var(--text-muted); }
+  .price-desc { font-size: 14px; color: var(--text-muted); margin-top: 12px; line-height: 1.6; }
+  .price-features {
+    list-style: none;
+    margin: 20px 0;
+    text-align: left;
+  }
+  .price-features li {
+    padding: 6px 0;
+    font-size: 14px;
+    color: var(--text-main);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .price-features li .check { color: var(--accent); font-weight: 700; }
+  .price-features li .cross { color: #CBD5E1; font-size: 14px; }
+
+  .price-compare {
+    max-width: 600px;
+    margin: 32px auto 0;
+    padding: 20px;
+    background: var(--bg);
+    border-radius: var(--radius-md);
+    text-align: center;
+  }
+  .price-compare p { font-size: 13px; color: var(--text-muted); }
+
+  /* ===== Target ===== */
+  .target {
+    position: relative;
+    overflow: hidden;
+  }
+  .target-orb {
+    position: absolute;
+    width: 350px; height: 350px;
+    background: radial-gradient(circle, rgba(79,70,229,0.07), transparent 70%);
+    top: -100px; left: -100px;
+    filter: blur(60px);
+    pointer-events: none;
+  }
+  .target-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    justify-content: center;
+    max-width: 700px;
+    margin: 0 auto;
+  }
+  .target-item {
+    padding: 14px 22px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-full);
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text-main);
+    transition: all 0.2s;
+    cursor: default;
+  }
+  .target-item:hover {
+    border-color: var(--primary);
+    background: var(--primary-light);
+    transform: translateY(-2px);
+  }
+
+  /* ===== Final CTA ===== */
+  .cta-section {
+    background: linear-gradient(135deg, #312E81, #1E1B4B);
+    padding: 80px 0;
+    position: relative;
+    overflow: hidden;
+  }
+  .cta-orb-1, .cta-orb-2 {
+    position: absolute;
+    border-radius: 50%;
+    pointer-events: none;
+  }
+  .cta-orb-1 {
+    width: 400px; height: 400px;
+    background: radial-gradient(circle, rgba(79,70,229,0.20), transparent 70%);
+    top: -150px; right: -100px;
+    filter: blur(80px);
+  }
+  .cta-orb-2 {
+    width: 300px; height: 300px;
+    background: radial-gradient(circle, rgba(124,58,237,0.15), transparent 70%);
+    bottom: -100px; left: -80px;
+    filter: blur(60px);
+  }
+  .cta-section .container {
+    position: relative;
+    z-index: 1;
+    text-align: center;
+  }
+  .cta-section h2 {
+    color: #fff;
+    margin-bottom: 12px;
+  }
+  .cta-section p {
+    color: #A5B4FC;
+    font-size: 17px;
+    max-width: 480px;
+    margin: 0 auto 32px;
+  }
+
+  /* ===== Footer ===== */
+  .footer {
+    padding: 32px 24px;
+    text-align: center;
+    border-top: 1px solid var(--border);
+    background: var(--surface);
+  }
+  .footer p { font-size: 13px; }
+
+  /* ===== Responsive Hero ===== */
+  @media (max-width: 900px) {
+    .hero .container {
+      grid-template-columns: 1fr;
+      gap: 40px;
+    }
+    .hero-text { max-width: 100%; text-align: center; }
+    .hero .subheadline { margin-left: auto; margin-right: auto; }
+    .hero-signup { margin: 0 auto; }
+    .isometric-card { transform: none; }
+    .isometric-card:hover { transform: none; }
+    .float-card { display: none; }
+  }
+  @media (max-width: 540px) {
+    .hero { padding: 60px 0 40px; min-height: auto; }
+    .hero-signup { flex-direction: column; }
+    .hero-badge { margin-bottom: 20px; }
+  }
+
+  /* ===== Animations ===== */
+  .fade-in {
+    opacity: 0;
+    transform: translateY(20px);
+    animation: fadeIn 0.6s ease-out forwards;
+  }
+  .fade-in-delay-1 { animation-delay: 0.1s; }
+  .fade-in-delay-2 { animation-delay: 0.2s; }
+  .fade-in-delay-3 { animation-delay: 0.3s; }
+  .fade-in-delay-4 { animation-delay: 0.4s; }
+
+  @keyframes fadeIn {
+    to { opacity: 1; transform: translateY(0); }
+  }
+</style>
+</head>
+<body>
+
+<!-- ===== NAVIGATION ===== -->
+<nav class="nav" id="nav">
+  <div class="container">
+    <a href="#" class="nav-logo">Post<span class="logo-gradient">Saja</span></a>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="#how">Cara kerja</a></li>
+      <li><a href="#platforms">Platform</a></li>
+      <li><a href="#pricing">Harga</a></li>
+      <li><a href="#cta" class="btn-primary nav-cta"><i data-lucide="megaphone" style="width:16px;height:16px;stroke-width:2;"></i> Daftar</a></li>
+    </ul>
+    <button class="nav-mobile-toggle" id="navToggle" aria-label="Buka menu">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+        <line x1="4" y1="6" x2="20" y2="6"/>
+        <line x1="4" y1="12" x2="20" y2="12"/>
+        <line x1="4" y1="18" x2="20" y2="18"/>
+      </svg>
+    </button>
+  </div>
+</nav>
+
+<!-- ===== HERO ===== -->
+<section class="hero">
+  <div class="hero-orb-1"></div>
+  <div class="hero-orb-2"></div>
+
+  <div class="container">
+    <div class="hero-text fade-in">
+      <div class="hero-badge">
+        <span class="dot"></span>
+        AI Marketing Assistant — kini untuk SME Malaysia
+      </div>
+      <h1>
+        Post <span class="split-gradient">saja.</span>
+      </h1>
+      <h1 style="color: var(--text-main);">Marketing jadi.</h1>
+      <p class="subheadline">
+        Kau snap gambar kerja macam biasa. AI kami buat caption, design, hashtag — 
+        dan post automatik ke Google Business, Facebook, Instagram, WhatsApp, TikTok.
+      </p>
+
+      <form class="hero-signup" id="signup-form" action="#" method="post">
+        <input type="email" class="input-field" id="email" placeholder="Email kau" required aria-label="Email">
+        <button type="submit" class="btn-primary">
+          <i data-lucide="megaphone" style="width:16px;height:16px;stroke-width:2;"></i> Saya nak!
+        </button>
+      </form>
+      <p class="signup-note">
+        Free 14 hari bila launch · Pro RM49/bln · Batal bila-bila
+      </p>
+      <div id="hero-msg"></div>
+    </div>
+
+    <!-- Hero Visual -->
+    <div class="hero-visual fade-in fade-in-delay-2">
+      <div class="isometric-wrapper">
+        <div class="isometric-card">
+          <div class="iso-header">
+            <div class="iso-avatar">BN</div>
+            <div>
+              <div class="iso-name">Bengkel Nasmir</div>
+              <div class="iso-role">Auto-posting · 12 minit lepas</div>
+            </div>
+          </div>
+
+          <div class="iso-post">
+            <div class="iso-post-img">🔧🚗</div>
+            <p><strong>Servis tayar dan minyak hitam</strong> — Perodua Myvi 2019. 
+            Siap dalam 2 jam. Kepuasan dijamin! ✅</p>
+            <small>📸 Gambar kerja auto → Google Business + WhatsApp Status</small>
+          </div>
+
+          <div class="iso-stats">
+            <div class="iso-stat">
+              <strong>15</strong>
+              <span>👍 Likes</span>
+            </div>
+            <div class="iso-stat">
+              <strong>4</strong>
+              <span>💬 Baru</span>
+            </div>
+            <div class="iso-stat">
+              <strong>89</strong>
+              <span>👀 Views</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="float-card">
+          <div class="label">Post automatik</div>
+          <div class="value">+3x reach</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== HOW IT WORKS ===== -->
+<section class="how" id="how">
+  <div class="how-orb"></div>
+  <div class="container text-center">
+    <span class="section-label">Cara kerja</span>
+    <h2>Langkah <span class="gradient-text">sempoi</span></h2>
+    <p class="section-desc">
+      Kau dah biasa snap gambar kerja. Sekarang biar AI sambung urusan marketing.
+    </p>
+
+    <div class="steps-grid">
+      <div class="step-card fade-in">
+        <div class="step-num"><i data-lucide="camera" style="width:20px;height:20px;stroke-width:2;"></i></div>
+        <h3>Kau snap</h3>
+        <p>Gambar kerja macam biasa — kereta siap, homestay bersih, makanan sedap. Tak perlu edit apa-apa.</p>
+      </div>
+      <div class="step-card fade-in fade-in-delay-1">
+        <div class="step-num"><i data-lucide="bot" style="width:20px;height:20px;stroke-width:2;"></i></div>
+        <h3>AI buat content</h3>
+        <p>Caption, hashtag, design, platform-target — semua auto ikut jenis bisnes dan lokasi kau.</p>
+      </div>
+      <div class="step-card fade-in fade-in-delay-2">
+        <div class="step-num"><i data-lucide="send" style="width:20px;height:20px;stroke-width:2;"></i></div>
+        <h3>Auto post</h3>
+        <p>Google Business, Facebook, Instagram, WhatsApp Status, TikTok, YouTube — sekali tayang, sampai semua.</p>
+      </div>
+      <div class="step-card fade-in fade-in-delay-3">
+        <div class="step-num"><i data-lucide="trending-up" style="width:20px;height:20px;stroke-width:2;"></i></div>
+        <h3>Pelanggan datang</h3>
+        <p>Bisnes makin nampak. Orang makin kenal. Repeat customer auto remind. Untung makin naik.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== PLATFORMS ===== -->
+<section class="plat-section" id="platforms">
+  <div class="container text-center">
+    <span class="section-label">Platform</span>
+    <h2>Cover <span class="gradient-text">semua</span></h2>
+    <p class="section-desc">
+      Yang kompetitor tak cover — kami cover. Yang standard — kami cover jugak.
+    </p>
+
+    <div class="platforms">
+      <span class="plat highlight">Google Business</span>
+      <span class="plat highlight">WhatsApp Status</span>
+      <span class="plat">Facebook Page</span>
+      <span class="plat">Instagram</span>
+      <span class="plat highlight">WhatsApp Broadcast</span>
+      <span class="plat">TikTok</span>
+      <span class="plat">YouTube</span>
+    </div>
+
+    <div class="plat-legend">
+      <div class="plat-legend-item">
+        <span class="legend-dot gap"></span>
+        Gap — kompetitor tak cover
+      </div>
+      <div class="plat-legend-item">
+        <span class="legend-dot normal"></span>
+        Standard — semua ada
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== PRICING ===== -->
+<section class="pricing" id="pricing">
+  <div class="pricing-orb"></div>
+  <div class="container text-center">
+    <span class="section-label">Harga</span>
+    <h2>Lagi murah dari <span class="gradient-text">kopi</span> sehari</h2>
+    <p class="section-desc">
+      RM49 vs Hootsuite RM430. Sama cover, plus AI content + WhatsApp Status.
+    </p>
+
+    <div class="pricing-grid">
+      <div class="price-card fade-in">
+        <div class="price-tier">Starter</div>
+        <div class="price-amount">RM29 <span>/mo</span></div>
+        <ul class="price-features">
+          <li><span class="check">✓</span> Google Business + FB</li>
+          <li><span class="check">✓</span> 30 posts/bulan</li>
+          <li><span class="cross">—</span> WhatsApp Status</li>
+          <li><span class="cross">—</span> Auto follow-up</li>
+        </ul>
+        <button class="btn-secondary" style="width:100%;">Daftar</button>
+      </div>
+
+      <div class="price-card featured fade-in fade-in-delay-1">
+        <div class="price-badge">⭐ Paling laku</div>
+        <div class="price-tier">Pro</div>
+        <div class="price-amount">RM49 <span>/mo</span></div>
+        <ul class="price-features">
+          <li><span class="check">✓</span> Semua platform</li>
+          <li><span class="check">✓</span> 90 posts/bulan</li>
+          <li><span class="check">✓</span> WhatsApp Status + Broadcast</li>
+          <li><span class="check">✓</span> Auto follow-up pelanggan</li>
+        </ul>
+        <button class="btn-primary" style="width:100%;">Daftar sekarang</button>
+      </div>
+
+      <div class="price-card fade-in fade-in-delay-2">
+        <div class="price-tier">Multi</div>
+        <div class="price-amount">RM99 <span>/mo</span></div>
+        <ul class="price-features">
+          <li><span class="check">✓</span> Semua platform</li>
+          <li><span class="check">✓</span> Unlimited posts</li>
+          <li><span class="check">✓</span> Multi-location</li>
+          <li><span class="check">✓</span> Priority support</li>
+        </ul>
+        <button class="btn-secondary" style="width:100%;">Daftar</button>
+      </div>
+    </div>
+
+    <div class="price-compare">
+      <p>
+        <strong>Banding:</strong> Hootsuite RM430/bln · Sprout Social RM1,080/bln · WATI RM250/bln
+        <br>
+        <strong>PostSaja RM49</strong> — semua platform + AI content + WhatsApp Status sekali.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ===== TARGET ===== -->
+<section class="target">
+  <div class="target-orb"></div>
+  <div class="container text-center">
+    <span class="section-label">Siapa</span>
+    <h2>Untuk <span class="gradient-text">semua</span> bisnes kecil</h2>
+    <p class="section-desc">
+      Ada bisnes sendiri? Hari-hari sibuk urus kerja sampai marketing terbengkalai? PostSaja penyelesaiannya.
+    </p>
+    <div class="target-grid">
+      <span class="target-item">🔧 Bengkel</span>
+      <span class="target-item">🏠 Homestay</span>
+      <span class="target-item">💈 Barber / Salon</span>
+      <span class="target-item">🍽️ Restoran</span>
+      <span class="target-item">🏥 Klinik</span>
+      <span class="target-item">🏪 Kedai runcit</span>
+      <span class="target-item">📦 Bisnes apa-apa</span>
+    </div>
+  </div>
+</section>
+
+<!-- ===== FINAL CTA ===== -->
+<section class="cta-section" id="cta">
+  <div class="cta-orb-1"></div>
+  <div class="cta-orb-2"></div>
+  <div class="container">
+    <h2>Nak cuba?</h2>
+    <p>Free 14 hari. Tak payah kad kredit. Batal bila-bila.</p>
+    <form action="#" method="post" style="display:flex; gap:10px; max-width:420px; margin:0 auto; flex-wrap:wrap; justify-content:center;">
+      <input type="email" class="input-field" placeholder="Email kau" required style="background:rgba(255,255,255,0.08); border-color:rgba(255,255,255,0.15); color:#fff; min-width:200px; flex:1;">
+      <button type="submit" class="btn-primary" style="background:#fff; color:#312E81; box-shadow:none;">
+        <i data-lucide="megaphone" style="width:16px;height:16px;stroke-width:2;"></i> Saya nak!
+      </button>
+    </form>
+  </div>
+</section>
+
+<!-- ===== FOOTER ===== -->
+<footer class="footer">
+  <p><strong>PostSaja</strong> — Marketing untuk yang tak sempat marketing.</p>
+  <p class="text-xs" style="margin-top:6px;">© 2026 · Dibina untuk SME Malaysia</p>
+</footer>
+
+<script>
+  document.querySelectorAll('#signup-form').forEach(form => {
+  // Mobile nav toggle
+  const navToggle = document.getElementById('navToggle');
+  const navLinks = document.getElementById('navLinks');
+  if (navToggle) {
+    navToggle.addEventListener('click', () => {
+      navLinks.classList.toggle('open');
+    });
+    navLinks.querySelectorAll('a').forEach(link => {
+      link.addEventListener('click', () => navLinks.classList.remove('open'));
+    });
+  }
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const email = form.querySelector('.input-field').value;
+      const msg = document.getElementById('hero-msg');
+      if (!email) return;
+      msg.style.display = 'block';
+      msg.className = 'success';
+      msg.textContent = '✅ Dah masuk! Kami akan email bila PostSaja siap.';
+      form.querySelector('.input-field').value = '';
+    });
+  });
+
+  // Intersection Observer for fade-in
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.style.opacity = '1';
+        entry.target.style.transform = 'translateY(0)';
+      }
+    });
+  }, { threshold: 0.1 });
+
+  document.querySelectorAll('.fade-in').forEach(el => {
+    observer.observe(el);
+  });
+
+  // Init Lucide icons
+  if (typeof lucide !== 'undefined') lucide.createIcons();
+</script>
+
+</body>
+</html>
