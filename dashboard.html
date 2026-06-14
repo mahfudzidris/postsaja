@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8"/>
-<meta content="width=device-width, initial-scale=1.0, viewport-fit=cover" name="viewport"/>
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport"/>
 <title>PostSaja — Dashboard</title>
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -50,7 +50,10 @@ tailwind.config = {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     min-height: 100dvh;
+    overscroll-behavior: none;
   }
+
+  input, textarea, select { font-size: 16px !important; }
 
   .glass-header {
     background: rgba(248, 250, 252, 0.80);
@@ -83,6 +86,93 @@ tailwind.config = {
   .lucide-spin {
     animation: spin 1s linear infinite;
   }
+
+  /* Page transitions */
+  .page {
+    display: none;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+  }
+  .page.active {
+    display: block;
+    opacity: 1;
+  }
+
+  /* Nav badge */
+  .nav-badge {
+    position: absolute;
+    top: -2px;
+    right: -4px;
+    width: 16px;
+    height: 16px;
+    border-radius: 999px;
+    background: #EF4444;
+    color: #fff;
+    font-size: 9px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid white;
+  }
+
+  /* History item hover */
+  .history-item:active, .draft-item:active {
+    transform: scale(0.98);
+  }
+
+  /* Toggle switch */
+  .toggle-track {
+    width: 44px;
+    height: 24px;
+    border-radius: 999px;
+    background: #CBD5E1;
+    position: relative;
+    cursor: pointer;
+    transition: background 0.2s ease;
+  }
+  .toggle-track.active {
+    background: #4F46E5;
+  }
+  .toggle-thumb {
+    width: 20px;
+    height: 20px;
+    border-radius: 999px;
+    background: white;
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    transition: transform 0.2s ease;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.15);
+  }
+  .toggle-track.active .toggle-thumb {
+    transform: translateX(20px);
+  }
+
+  /* Connected account badge */
+  .connected-badge {
+    background: #D1FAE5;
+    color: #065F46;
+  }
+
+  /* Empty state illustration */
+  .empty-state {
+    opacity: 0.6;
+  }
+
+  /* Scrollbar hide */
+  .hide-scrollbar::-webkit-scrollbar { display: none; }
+  .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+  /* Stagger entrance animation for list items */
+  @keyframes fadeSlideUp {
+    from { opacity: 0; transform: translateY(12px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .stagger-item {
+    animation: fadeSlideUp 0.3s ease forwards;
+    opacity: 0;
+  }
 </style>
 </head>
 <body>
@@ -94,7 +184,10 @@ tailwind.config = {
     <span class="text-lg font-extrabold tracking-tight" style="color:#0F172A;">PostSaja</span>
   </a>
   <div class="flex items-center gap-3">
-    <i data-lucide="bell" style="width:22px;height:22px;stroke-width:1.5;color:#64748B;" class="hover:text-slate-900 cursor-pointer transition-colors"></i>
+    <div class="relative">
+      <i data-lucide="bell" style="width:22px;height:22px;stroke-width:1.5;color:#64748B;" class="hover:text-slate-900 cursor-pointer transition-colors"></i>
+      <div class="nav-badge">3</div>
+    </div>
     <div class="w-8 h-8 rounded-full overflow-hidden border-2 border-slate-200">
       <img alt="User" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCeFfRslRsWlaguHHSs-EYehQ2i6Cu4byi2FUGej2FTkdvrxq48zQQNADELLtvB6-Ce6vDLYPgGO-fdMJP4Qq4nmXRtD7eWiE_ZGA7yboM2czgCsRAqIHkLooXgyh4F2ON9jB8iqr7REeT1ixvqdVhnFORDKtm235ELyGtrIRrDG2CDbAD4yVl4o7sMtmeCQ86KxNRgqx9pZafhJG0WCT5n4h6FIFO0Jh3owDXxFUCl5jU3eB_vND2CQ_3J-MmgMsQkEBDkMMVer9xK"/>
     </div>
@@ -102,115 +195,572 @@ tailwind.config = {
 </header>
 
 <!-- ===== MAIN CONTENT ===== -->
-<main class="pt-14 pb-24 px-4 max-w-2xl mx-auto space-y-6">
+<main class="pt-14 pb-24 px-4 max-w-2xl mx-auto">
 
-  <!-- Media Upload -->
-  <section class="pt-4">
-    <label class="block mb-2 text-sm font-semibold text-slate-500 uppercase tracking-wide">Content Media</label>
-    <div class="upload-zone w-full aspect-square md:aspect-video border-2 border-dashed border-slate-200 bg-white rounded-2xl flex flex-col items-center justify-center gap-3 p-6 text-center cursor-pointer transition-all duration-200 active:scale-[0.98]" onclick="alert('File picker would open here')">
-      <div class="w-16 h-16 rounded-full bg-indigo-50 flex items-center justify-center">
-        <i data-lucide="image-plus" style="width:28px;height:28px;stroke-width:1.5;color:#4F46E5;"></i>
+  <!-- ==================== PAGE: CREATE ==================== -->
+  <section id="page-create" class="page active space-y-6">
+
+    <!-- Media Upload -->
+    <section class="pt-4">
+      <label class="block mb-2 text-sm font-semibold text-slate-500 uppercase tracking-wide">Content Media</label>
+      <div class="upload-zone w-full aspect-square md:aspect-video border-2 border-dashed border-slate-200 bg-white rounded-2xl flex flex-col items-center justify-center gap-3 p-6 text-center cursor-pointer transition-all duration-200 active:scale-[0.98]" onclick="document.getElementById('mediaInput').click()">
+        <input id="mediaInput" type="file" accept="image/*,video/*" class="hidden" multiple onchange="handleMediaUpload(event)">
+        <div class="w-16 h-16 rounded-full bg-indigo-50 flex items-center justify-center">
+          <i data-lucide="image-plus" style="width:28px;height:28px;stroke-width:1.5;color:#4F46E5;"></i>
+        </div>
+        <div>
+          <p class="text-lg font-semibold text-slate-900">Add Media</p>
+          <p class="text-sm text-slate-400 mt-1">Drag images or video here, or tap to browse</p>
+        </div>
       </div>
+      <!-- Media preview thumbnails -->
+      <div id="mediaPreviews" class="flex gap-2 mt-3 hide-scrollbar overflow-x-auto hidden"></div>
+    </section>
+
+    <!-- Caption / AI Tweak Card -->
+    <div class="bg-white rounded-2xl p-5 shadow-card border border-slate-100">
+      <div class="flex items-center justify-between mb-4">
+        <span class="text-sm font-semibold text-slate-500">Product Details</span>
+        <button id="aiTweakBtn" class="flex items-center gap-1.5 px-3 py-1.5 bg-emerald-50 text-emerald-700 rounded-full text-xs font-semibold hover:bg-emerald-100 active:scale-95 transition-all duration-150">
+          <i data-lucide="wand-sparkles" style="width:16px;height:16px;stroke-width:2;"></i>
+          AI Tweak
+        </button>
+      </div>
+      <textarea id="captionInput" class="w-full min-h-[120px] bg-slate-50 border-0 rounded-xl p-3 text-sm text-slate-900 focus:ring-2 focus:ring-indigo-500/30 focus:border-indigo-500 placeholder:text-slate-400 resize-none" placeholder="What are you selling today? Describe your product or service..."></textarea>
+      <div class="mt-2 flex items-center gap-1.5 text-xs text-slate-400">
+        <i data-lucide="info" style="width:14px;height:14px;stroke-width:2;color:#94A3B8;"></i>
+        <span>Optimize for local audiences with one click.</span>
+      </div>
+    </div>
+
+    <!-- Channel Checklist -->
+    <section>
+      <h2 class="text-lg font-bold text-slate-900 mb-3">Where to post?</h2>
+      <div class="grid grid-cols-1 gap-2">
+
+        <!-- Instagram -->
+        <button class="channel-btn flex items-center justify-between p-4 bg-white border border-slate-200 rounded-xl transition-all duration-150 active:scale-[0.98] hover:shadow-card" onclick="toggleChannel(this)">
+          <div class="flex items-center gap-4">
+            <div class="w-10 h-10 rounded-xl bg-pink-50 flex items-center justify-center">
+              <i data-lucide="camera" style="width:20px;height:20px;stroke-width:1.5;color:#E1306C;"></i>
+            </div>
+            <span class="text-sm font-semibold text-slate-900">Instagram</span>
+          </div>
+          <i data-lucide="circle-check" class="check-icon" style="width:20px;height:20px;stroke-width:1.5;color:#CBD5E1;"></i>
+        </button>
+
+        <!-- TikTok -->
+        <button class="channel-btn flex items-center justify-between p-4 bg-white border border-slate-200 rounded-xl transition-all duration-150 active:scale-[0.98] hover:shadow-card" onclick="toggleChannel(this)">
+          <div class="flex items-center gap-4">
+            <div class="w-10 h-10 rounded-xl bg-slate-100 flex items-center justify-center">
+              <i data-lucide="music" style="width:20px;height:20px;stroke-width:1.5;color:#0F172A;"></i>
+            </div>
+            <span class="text-sm font-semibold text-slate-900">TikTok</span>
+          </div>
+          <i data-lucide="circle-check" class="check-icon" style="width:20px;height:20px;stroke-width:1.5;color:#CBD5E1;"></i>
+        </button>
+
+        <!-- Google Business -->
+        <button class="channel-btn flex items-center justify-between p-4 bg-white border border-slate-200 rounded-xl transition-all duration-150 active:scale-[0.98] hover:shadow-card" onclick="toggleChannel(this)">
+          <div class="flex items-center gap-4">
+            <div class="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center">
+              <i data-lucide="store" style="width:20px;height:20px;stroke-width:1.5;color:#4285F4;"></i>
+            </div>
+            <span class="text-sm font-semibold text-slate-900">Google Business</span>
+          </div>
+          <i data-lucide="circle-check" class="check-icon" style="width:20px;height:20px;stroke-width:1.5;color:#CBD5E1;"></i>
+        </button>
+
+        <!-- Telegram -->
+        <button class="channel-btn flex items-center justify-between p-4 bg-white border border-slate-200 rounded-xl transition-all duration-150 active:scale-[0.98] hover:shadow-card" onclick="toggleChannel(this)">
+          <div class="flex items-center gap-4">
+            <div class="w-10 h-10 rounded-xl bg-sky-50 flex items-center justify-center">
+              <i data-lucide="send" style="width:20px;height:20px;stroke-width:1.5;color:#0088cc;"></i>
+            </div>
+            <span class="text-sm font-semibold text-slate-900">Telegram</span>
+          </div>
+          <i data-lucide="circle-check" class="check-icon" style="width:20px;height:20px;stroke-width:1.5;color:#CBD5E1;"></i>
+        </button>
+
+      </div>
+    </section>
+
+    <!-- Post + Save Draft buttons -->
+    <div class="pt-2 flex flex-col gap-3">
+      <button id="postBtn" class="w-full h-14 rounded-2xl text-white font-bold text-lg shadow-btn hover:-translate-y-0.5 active:translate-y-0 transition-all duration-200 flex items-center justify-center gap-2" style="background:linear-gradient(135deg, #4F46E5, #7C3AED);">
+        Post Saja!
+        <i data-lucide="rocket" style="width:22px;height:22px;stroke-width:2;"></i>
+      </button>
+      <button id="saveDraftBtn" class="w-full h-12 rounded-2xl text-slate-600 font-semibold text-sm border border-slate-200 bg-white hover:bg-slate-50 active:scale-[0.98] transition-all duration-200 flex items-center justify-center gap-2">
+        <i data-lucide="save" style="width:18px;height:18px;stroke-width:1.5;"></i>
+        Save as Draft
+      </button>
+    </div>
+
+  </section>
+
+  <!-- ==================== PAGE: HISTORY ==================== -->
+  <section id="page-history" class="page space-y-6">
+
+    <div class="pt-4 flex items-center justify-between">
       <div>
-        <p class="text-lg font-semibold text-slate-900">Add Media</p>
-        <p class="text-sm text-slate-400 mt-1">Drag images or video here, or tap to browse</p>
+        <h1 class="text-xl font-bold text-slate-900">Post History</h1>
+        <p class="text-sm text-slate-400 mt-0.5">Your recent cross-posts</p>
+      </div>
+      <button class="flex items-center gap-1.5 px-3 py-1.5 bg-white border border-slate-200 rounded-xl text-xs font-semibold text-slate-600 hover:bg-slate-50 active:scale-95 transition-all duration-150">
+        <i data-lucide="filter" style="width:14px;height:14px;stroke-width:2;"></i>
+        Filter
+      </button>
+    </div>
+
+    <!-- Staggered history items -->
+    <div id="historyList" class="space-y-3">
+
+      <!-- Item 1 -->
+      <div class="history-item stagger-item bg-white rounded-2xl p-4 shadow-card border border-slate-100 transition-all duration-150 cursor-pointer hover:shadow-card-hover" style="animation-delay:0s;">
+        <div class="flex gap-3">
+          <div class="w-14 h-14 rounded-xl bg-gradient-to-br from-pink-400 to-orange-300 flex-shrink-0 overflow-hidden">
+            <img alt="Media" class="w-full h-full object-cover" src="https://images.unsplash.com/photo-1606787366850-de6330128bfc?w=80&h=80&fit=crop"/>
+          </div>
+          <div class="flex-1 min-w-0">
+            <p class="text-sm font-semibold text-slate-900 truncate">🔥 LIMITED OFFER: Fresh baked croissants! Visit us today!</p>
+            <div class="flex items-center gap-1.5 mt-1.5 flex-wrap">
+              <span class="inline-flex items-center gap-1 px-2 py-0.5 bg-pink-100 text-pink-700 rounded-full text-[10px] font-semibold">
+                <i data-lucide="camera" style="width:10px;height:10px;stroke-width:2.5;"></i> IG
+              </span>
+              <span class="inline-flex items-center gap-1 px-2 py-0.5 bg-sky-100 text-sky-700 rounded-full text-[10px] font-semibold">
+                <i data-lucide="send" style="width:10px;height:10px;stroke-width:2.5;"></i> TG
+              </span>
+              <span class="inline-flex items-center gap-1 px-2 py-0.5 bg-emerald-100 text-emerald-700 rounded-full text-[10px] font-semibold">
+                <i data-lucide="circle-check" style="width:10px;height:10px;stroke-width:2.5;"></i> Posted
+              </span>
+              <span class="text-[10px] text-slate-400 ml-auto">2h ago</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Item 2 -->
+      <div class="history-item stagger-item bg-white rounded-2xl p-4 shadow-card border border-slate-100 transition-all duration-150 cursor-pointer hover:shadow-card-hover" style="animation-delay:0.05s;">
+        <div class="flex gap-3">
+          <div class="w-14 h-14 rounded-xl bg-gradient-to-br from-blue-400 to-cyan-300 flex-shrink-0 overflow-hidden">
+            <img alt="Media" class="w-full h-full object-cover" src="https://images.unsplash.com/photo-1561758033-d89a9ad46330?w=80&h=80&fit=crop"/>
+          </div>
+          <div class="flex-1 min-w-0">
+            <p class="text-sm font-semibold text-slate-900 truncate">New menu items available at our cafe! Come try our signature lattes ☕</p>
+            <div class="flex items-center gap-1.5 mt-1.5 flex-wrap">
+              <span class="inline-flex items-center gap-1 px-2 py-0.5 bg-indigo-100 text-indigo-700 rounded-full text-[10px] font-semibold">
+                <i data-lucide="store" style="width:10px;height:10px;stroke-width:2.5;"></i> GBP
+              </span>
+              <span class="inline-flex items-center gap-1 px-2 py-0.5 bg-amber-100 text-amber-700 rounded-full text-[10px] font-semibold">
+                <i data-lucide="clock" style="width:10px;height:10px;stroke-width:2.5;"></i> Scheduled
+              </span>
+              <span class="text-[10px] text-slate-400 ml-auto">Yesterday</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Item 3 -->
+      <div class="history-item stagger-item bg-white rounded-2xl p-4 shadow-card border border-slate-100 transition-all duration-150 cursor-pointer hover:shadow-card-hover" style="animation-delay:0.1s;">
+        <div class="flex gap-3">
+          <div class="w-14 h-14 rounded-xl bg-gradient-to-br from-slate-200 to-slate-300 flex-shrink-0 overflow-hidden flex items-center justify-center">
+            <i data-lucide="video" style="width:24px;height:24px;stroke-width:1.5;color:#64748B;"></i>
+          </div>
+          <div class="flex-1 min-w-0">
+            <p class="text-sm font-semibold text-slate-900 truncate">Video walkthrough: Our new co-working space at downtown!</p>
+            <div class="flex items-center gap-1.5 mt-1.5 flex-wrap">
+              <span class="inline-flex items-center gap-1 px-2 py-0.5 bg-slate-100 text-slate-700 rounded-full text-[10px] font-semibold">
+                <i data-lucide="music" style="width:10px;height:10px;stroke-width:2.5;"></i> TT
+              </span>
+              <span class="inline-flex items-center gap-1 px-2 py-0.5 bg-red-100 text-red-700 rounded-full text-[10px] font-semibold">
+                <i data-lucide="alert-circle" style="width:10px;height:10px;stroke-width:2.5;"></i> Failed
+              </span>
+              <span class="text-[10px] text-slate-400 ml-auto">2 days ago</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Item 4 -->
+      <div class="history-item stagger-item bg-white rounded-2xl p-4 shadow-card border border-slate-100 transition-all duration-150 cursor-pointer hover:shadow-card-hover" style="animation-delay:0.15s;">
+        <div class="flex gap-3">
+          <div class="w-14 h-14 rounded-xl bg-gradient-to-br from-emerald-400 to-teal-300 flex-shrink-0 overflow-hidden">
+            <img alt="Media" class="w-full h-full object-cover" src="https://images.unsplash.com/photo-1590004953392-5f89d137c8d5?w=80&h=80&fit=crop"/>
+          </div>
+          <div class="flex-1 min-w-0">
+            <p class="text-sm font-semibold text-slate-900 truncate">Weekend promo: 20% off all items! Use code WEEKEND20</p>
+            <div class="flex items-center gap-1.5 mt-1.5 flex-wrap">
+              <span class="inline-flex items-center gap-1 px-2 py-0.5 bg-pink-100 text-pink-700 rounded-full text-[10px] font-semibold">
+                <i data-lucide="camera" style="width:10px;height:10px;stroke-width:2.5;"></i> IG
+              </span>
+              <span class="inline-flex items-center gap-1 px-2 py-0.5 bg-indigo-100 text-indigo-700 rounded-full text-[10px] font-semibold">
+                <i data-lucide="store" style="width:10px;height:10px;stroke-width:2.5;"></i> GBP
+              </span>
+              <span class="inline-flex items-center gap-1 px-2 py-0.5 bg-sky-100 text-sky-700 rounded-full text-[10px] font-semibold">
+                <i data-lucide="send" style="width:10px;height:10px;stroke-width:2.5;"></i> TG
+              </span>
+              <span class="inline-flex items-center gap-1 px-2 py-0.5 bg-emerald-100 text-emerald-700 rounded-full text-[10px] font-semibold">
+                <i data-lucide="circle-check" style="width:10px;height:10px;stroke-width:2.5;"></i> Posted
+              </span>
+              <span class="text-[10px] text-slate-400 ml-auto">3 days ago</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Item 5 -->
+      <div class="history-item stagger-item bg-white rounded-2xl p-4 shadow-card border border-slate-100 transition-all duration-150 cursor-pointer hover:shadow-card-hover" style="animation-delay:0.2s;">
+        <div class="flex gap-3">
+          <div class="w-14 h-14 rounded-xl bg-gradient-to-br from-violet-400 to-purple-300 flex-shrink-0 overflow-hidden">
+            <img alt="Media" class="w-full h-full object-cover" src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=80&h=80&fit=crop"/>
+          </div>
+          <div class="flex-1 min-w-0">
+            <p class="text-sm font-semibold text-slate-900 truncate">🔥 NEW ARRIVAL: Limited edition sneakers dropping this Friday!</p>
+            <div class="flex items-center gap-1.5 mt-1.5 flex-wrap">
+              <span class="inline-flex items-center gap-1 px-2 py-0.5 bg-pink-100 text-pink-700 rounded-full text-[10px] font-semibold">
+                <i data-lucide="camera" style="width:10px;height:10px;stroke-width:2.5;"></i> IG
+              </span>
+              <span class="inline-flex items-center gap-1 px-2 py-0.5 bg-slate-100 text-slate-700 rounded-full text-[10px] font-semibold">
+                <i data-lucide="music" style="width:10px;height:10px;stroke-width:2.5;"></i> TT
+              </span>
+              <span class="inline-flex items-center gap-1 px-2 py-0.5 bg-sky-100 text-sky-700 rounded-full text-[10px] font-semibold">
+                <i data-lucide="send" style="width:10px;height:10px;stroke-width:2.5;"></i> TG
+              </span>
+              <span class="inline-flex items-center gap-1 px-2 py-0.5 bg-emerald-100 text-emerald-700 rounded-full text-[10px] font-semibold">
+                <i data-lucide="circle-check" style="width:10px;height:10px;stroke-width:2.5;"></i> Posted
+              </span>
+              <span class="text-[10px] text-slate-400 ml-auto">4 days ago</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+  </section>
+
+  <!-- ==================== PAGE: DRAFTS ==================== -->
+  <section id="page-drafts" class="page space-y-6">
+
+    <div class="pt-4">
+      <h1 class="text-xl font-bold text-slate-900">Drafts</h1>
+      <p class="text-sm text-slate-400 mt-0.5">2 saved drafts</p>
+    </div>
+
+    <!-- Draft Item 1 -->
+    <div class="draft-item stagger-item bg-white rounded-2xl p-5 shadow-card border border-slate-100 transition-all duration-150 cursor-pointer hover:shadow-card-hover" style="animation-delay:0s;">
+      <div class="flex items-start gap-3">
+        <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-amber-50 to-amber-100 flex items-center justify-center flex-shrink-0">
+          <i data-lucide="file-edit" style="width:22px;height:22px;stroke-width:1.5;color:#D97706;"></i>
+        </div>
+        <div class="flex-1 min-w-0">
+          <p class="text-sm font-semibold text-slate-900 line-clamp-2">🌟 Grand opening this weekend! Come visit our new store at the mall...</p>
+          <div class="flex items-center gap-3 mt-2 text-xs text-slate-400">
+            <span class="flex items-center gap-1">
+              <i data-lucide="image" style="width:12px;height:12px;stroke-width:2;"></i>
+              3 media
+            </span>
+            <span class="flex items-center gap-1">
+              <i data-lucide="clock" style="width:12px;height:12px;stroke-width:2;"></i>
+              Edited 10m ago
+            </span>
+          </div>
+          <div class="flex items-center gap-2 mt-2">
+            <span class="inline-flex items-center gap-1 px-2 py-0.5 bg-pink-100 text-pink-700 rounded-full text-[10px] font-semibold">
+              <i data-lucide="camera" style="width:10px;height:10px;stroke-width:2.5;"></i> IG
+            </span>
+            <span class="inline-flex items-center gap-1 px-2 py-0.5 bg-sky-100 text-sky-700 rounded-full text-[10px] font-semibold">
+              <i data-lucide="send" style="width:10px;height:10px;stroke-width:2.5;"></i> TG
+            </span>
+          </div>
+        </div>
+        <button class="flex-shrink-0 p-2 rounded-lg hover:bg-slate-100 transition-colors active:scale-90" onclick="event.stopPropagation(); deleteDraft(this)">
+          <i data-lucide="trash-2" style="width:18px;height:18px;stroke-width:1.5;color:#EF4444;"></i>
+        </button>
       </div>
     </div>
+
+    <!-- Draft Item 2 -->
+    <div class="draft-item stagger-item bg-white rounded-2xl p-5 shadow-card border border-slate-100 transition-all duration-150 cursor-pointer hover:shadow-card-hover" style="animation-delay:0.08s;">
+      <div class="flex items-start gap-3">
+        <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-emerald-50 to-emerald-100 flex items-center justify-center flex-shrink-0">
+          <i data-lucide="file-edit" style="width:22px;height:22px;stroke-width:1.5;color:#059669;"></i>
+        </div>
+        <div class="flex-1 min-w-0">
+          <p class="text-sm font-semibold text-slate-900 line-clamp-2">Weekly special: Buy 1 Free 1 for all coffee drinks! Valid until Sunday...</p>
+          <div class="flex items-center gap-3 mt-2 text-xs text-slate-400">
+            <span class="flex items-center gap-1">
+              <i data-lucide="video" style="width:12px;height:12px;stroke-width:2;"></i>
+              1 video
+            </span>
+            <span class="flex items-center gap-1">
+              <i data-lucide="clock" style="width:12px;height:12px;stroke-width:2;"></i>
+              Edited yesterday
+            </span>
+          </div>
+          <div class="flex items-center gap-2 mt-2">
+            <span class="inline-flex items-center gap-1 px-2 py-0.5 bg-indigo-100 text-indigo-700 rounded-full text-[10px] font-semibold">
+              <i data-lucide="store" style="width:10px;height:10px;stroke-width:2.5;"></i> GBP
+            </span>
+            <span class="inline-flex items-center gap-1 px-2 py-0.5 bg-slate-100 text-slate-700 rounded-full text-[10px] font-semibold">
+              <i data-lucide="music" style="width:10px;height:10px;stroke-width:2.5;"></i> TT
+            </span>
+          </div>
+        </div>
+        <button class="flex-shrink-0 p-2 rounded-lg hover:bg-slate-100 transition-colors active:scale-90" onclick="event.stopPropagation(); deleteDraft(this)">
+          <i data-lucide="trash-2" style="width:18px;height:18px;stroke-width:1.5;color:#EF4444;"></i>
+        </button>
+      </div>
+    </div>
+
+    <!-- Empty state (hidden by default) -->
+    <div id="draftsEmpty" class="empty-state hidden flex flex-col items-center justify-center py-16 text-center">
+      <div class="w-20 h-20 rounded-full bg-indigo-50 flex items-center justify-center mb-4">
+        <i data-lucide="file-text" style="width:36px;height:36px;stroke-width:1.5;color:#4F46E5;"></i>
+      </div>
+      <p class="text-base font-semibold text-slate-400">No drafts yet</p>
+      <p class="text-sm text-slate-300 mt-1">Save your work-in-progress here</p>
+    </div>
+
   </section>
 
-  <!-- Caption / AI Tweak Card -->
-  <div class="bg-white rounded-2xl p-5 shadow-card border border-slate-100">
-    <div class="flex items-center justify-between mb-4">
-      <span class="text-sm font-semibold text-slate-500">Product Details</span>
-      <button id="aiTweakBtn" class="flex items-center gap-1.5 px-3 py-1.5 bg-emerald-50 text-emerald-700 rounded-full text-xs font-semibold hover:bg-emerald-100 active:scale-95 transition-all duration-150">
-        <i data-lucide="wand-sparkles" style="width:16px;height:16px;stroke-width:2;"></i>
-        AI Tweak
-      </button>
+  <!-- ==================== PAGE: SETTINGS ==================== -->
+  <section id="page-settings" class="page space-y-6">
+
+    <div class="pt-4">
+      <h1 class="text-xl font-bold text-slate-900">Settings</h1>
+      <p class="text-sm text-slate-400 mt-0.5">Manage your account and preferences</p>
     </div>
-    <textarea id="captionInput" class="w-full min-h-[120px] bg-slate-50 border-0 rounded-xl p-3 text-sm text-slate-900 focus:ring-2 focus:ring-indigo-500/30 focus:border-indigo-500 placeholder:text-slate-400 resize-none" placeholder="What are you selling today? Describe your product or service..."></textarea>
-    <div class="mt-2 flex items-center gap-1.5 text-xs text-slate-400">
-      <i data-lucide="info" style="width:14px;height:14px;stroke-width:2;color:#94A3B8;"></i>
-      <span>Optimize for local audiences with one click.</span>
+
+    <!-- Profile Card -->
+    <div class="bg-white rounded-2xl p-5 shadow-card border border-slate-100">
+      <div class="flex items-center gap-4">
+        <div class="w-16 h-16 rounded-full overflow-hidden border-2 border-indigo-100">
+          <img alt="Profile" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCeFfRslRsWlaguHHSs-EYehQ2i6Cu4byi2FUGej2FTkdvrxq48zQQNADELLtvB6-Ce6vDLYPgGO-fdMJP4Qq4nmXRtD7eWiE_ZGA7yboM2czgCsRAqIHkLooXgyh4F2ON9jB8iqr7REeT1ixvqdVhnFORDKtm235ELyGtrIRrDG2CDbAD4yVl4o7sMtmeCQ86KxNRgqx9pZafhJG0WCT5n4h6FIFO0Jh3owDXxFUCl5jU3eB_vND2CQ_3J-MmgMsQkEBDkMMVer9xK"/>
+        </div>
+        <div class="flex-1">
+          <p class="text-base font-bold text-slate-900">Mahfudz Idris</p>
+          <p class="text-sm text-slate-400">mahfudz@postsaja.com</p>
+          <span class="inline-flex items-center gap-1 mt-1.5 px-2.5 py-0.5 bg-indigo-50 text-indigo-600 rounded-full text-[10px] font-semibold">
+            <i data-lucide="crown" style="width:10px;height:10px;stroke-width:2.5;"></i>
+            Pro Plan
+          </span>
+        </div>
+        <button class="p-2 rounded-lg hover:bg-slate-100 transition-colors active:scale-90">
+          <i data-lucide="chevron-right" style="width:20px;height:20px;stroke-width:1.5;color:#94A3B8;"></i>
+        </button>
+      </div>
     </div>
-  </div>
 
-  <!-- Channel Checklist -->
-  <section>
-    <h2 class="text-lg font-bold text-slate-900 mb-3">Where to post?</h2>
-    <div class="grid grid-cols-1 gap-2">
+    <!-- Connected Accounts -->
+    <div class="bg-white rounded-2xl p-5 shadow-card border border-slate-100">
+      <h2 class="text-sm font-semibold text-slate-500 uppercase tracking-wide mb-4">Connected Accounts</h2>
+      <div class="space-y-3">
 
-      <!-- Instagram -->
-      <button class="channel-btn flex items-center justify-between p-4 bg-white border border-slate-200 rounded-xl transition-all duration-150 active:scale-[0.98] hover:shadow-card" onclick="toggleChannel(this)">
-        <div class="flex items-center gap-4">
-          <div class="w-10 h-10 rounded-xl bg-pink-50 flex items-center justify-center">
-            <i data-lucide="camera" style="width:20px;height:20px;stroke-width:1.5;color:#E1306C;"></i>
+        <!-- Instagram -->
+        <div class="flex items-center justify-between py-2">
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-xl bg-pink-50 flex items-center justify-center">
+              <i data-lucide="camera" style="width:18px;height:18px;stroke-width:1.5;color:#E1306C;"></i>
+            </div>
+            <div>
+              <p class="text-sm font-semibold text-slate-900">Instagram</p>
+              <p class="text-[11px] text-slate-400">@your_business</p>
+            </div>
           </div>
-          <span class="text-sm font-semibold text-slate-900">Instagram</span>
+          <span class="px-2.5 py-1 rounded-full text-[10px] font-semibold connected-badge">
+            <i data-lucide="link" style="width:11px;height:11px;stroke-width:2.5;display:inline;vertical-align:-1px;"></i> Connected
+          </span>
         </div>
-        <i data-lucide="circle-check" class="check-icon" style="width:20px;height:20px;stroke-width:1.5;color:#CBD5E1;"></i>
-      </button>
 
-      <!-- TikTok -->
-      <button class="channel-btn flex items-center justify-between p-4 bg-white border border-slate-200 rounded-xl transition-all duration-150 active:scale-[0.98] hover:shadow-card" onclick="toggleChannel(this)">
-        <div class="flex items-center gap-4">
-          <div class="w-10 h-10 rounded-xl bg-slate-100 flex items-center justify-center">
-            <i data-lucide="music" style="width:20px;height:20px;stroke-width:1.5;color:#0F172A;"></i>
+        <div class="border-t border-slate-100"></div>
+
+        <!-- TikTok -->
+        <div class="flex items-center justify-between py-2">
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-xl bg-slate-50 flex items-center justify-center">
+              <i data-lucide="music" style="width:18px;height:18px;stroke-width:1.5;color:#0F172A;"></i>
+            </div>
+            <div>
+              <p class="text-sm font-semibold text-slate-900">TikTok</p>
+              <p class="text-[11px] text-slate-400">@your_business</p>
+            </div>
           </div>
-          <span class="text-sm font-semibold text-slate-900">TikTok</span>
+          <span class="px-2.5 py-1 rounded-full text-[10px] font-semibold connected-badge">
+            <i data-lucide="link" style="width:11px;height:11px;stroke-width:2.5;display:inline;vertical-align:-1px;"></i> Connected
+          </span>
         </div>
-        <i data-lucide="circle-check" class="check-icon" style="width:20px;height:20px;stroke-width:1.5;color:#CBD5E1;"></i>
-      </button>
 
-      <!-- Google Business -->
-      <button class="channel-btn flex items-center justify-between p-4 bg-white border border-slate-200 rounded-xl transition-all duration-150 active:scale-[0.98] hover:shadow-card" onclick="toggleChannel(this)">
-        <div class="flex items-center gap-4">
-          <div class="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center">
-            <i data-lucide="store" style="width:20px;height:20px;stroke-width:1.5;color:#4285F4;"></i>
+        <div class="border-t border-slate-100"></div>
+
+        <!-- Google Business -->
+        <div class="flex items-center justify-between py-2">
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center">
+              <i data-lucide="store" style="width:18px;height:18px;stroke-width:1.5;color:#4285F4;"></i>
+            </div>
+            <div>
+              <p class="text-sm font-semibold text-slate-900">Google Business</p>
+              <p class="text-[11px] text-slate-400">Not connected</p>
+            </div>
           </div>
-          <span class="text-sm font-semibold text-slate-900">Google Business</span>
+          <button class="px-3 py-1.5 border border-indigo-200 text-indigo-600 rounded-full text-xs font-semibold hover:bg-indigo-50 active:scale-95 transition-all duration-150">
+            Connect
+          </button>
         </div>
-        <i data-lucide="circle-check" class="check-icon" style="width:20px;height:20px;stroke-width:1.5;color:#CBD5E1;"></i>
-      </button>
 
-      <!-- Telegram -->
-      <button class="channel-btn flex items-center justify-between p-4 bg-white border border-slate-200 rounded-xl transition-all duration-150 active:scale-[0.98] hover:shadow-card" onclick="toggleChannel(this)">
-        <div class="flex items-center gap-4">
-          <div class="w-10 h-10 rounded-xl bg-sky-50 flex items-center justify-center">
-            <i data-lucide="send" style="width:20px;height:20px;stroke-width:1.5;color:#0088cc;"></i>
+        <div class="border-t border-slate-100"></div>
+
+        <!-- Telegram -->
+        <div class="flex items-center justify-between py-2">
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-xl bg-sky-50 flex items-center justify-center">
+              <i data-lucide="send" style="width:18px;height:18px;stroke-width:1.5;color:#0088cc;"></i>
+            </div>
+            <div>
+              <p class="text-sm font-semibold text-slate-900">Telegram</p>
+              <p class="text-[11px] text-slate-400">Not connected</p>
+            </div>
           </div>
-          <span class="text-sm font-semibold text-slate-900">Telegram</span>
+          <button class="px-3 py-1.5 border border-indigo-200 text-indigo-600 rounded-full text-xs font-semibold hover:bg-indigo-50 active:scale-95 transition-all duration-150">
+            Connect
+          </button>
         </div>
-        <i data-lucide="circle-check" class="check-icon" style="width:20px;height:20px;stroke-width:1.5;color:#CBD5E1;"></i>
-      </button>
 
+      </div>
     </div>
+
+    <!-- Notification Preferences -->
+    <div class="bg-white rounded-2xl p-5 shadow-card border border-slate-100">
+      <h2 class="text-sm font-semibold text-slate-500 uppercase tracking-wide mb-4">Notifications</h2>
+      <div class="space-y-4">
+
+        <div class="flex items-center justify-between">
+          <div>
+            <p class="text-sm font-semibold text-slate-900">Post Success</p>
+            <p class="text-xs text-slate-400">Notify when a post is published</p>
+          </div>
+          <div class="toggle-track active" onclick="toggleSwitch(this)">
+            <div class="toggle-thumb"></div>
+          </div>
+        </div>
+
+        <div class="border-t border-slate-100"></div>
+
+        <div class="flex items-center justify-between">
+          <div>
+            <p class="text-sm font-semibold text-slate-900">Post Failures</p>
+            <p class="text-xs text-slate-400">Alert when a post fails</p>
+          </div>
+          <div class="toggle-track active" onclick="toggleSwitch(this)">
+            <div class="toggle-thumb"></div>
+          </div>
+        </div>
+
+        <div class="border-t border-slate-100"></div>
+
+        <div class="flex items-center justify-between">
+          <div>
+            <p class="text-sm font-semibold text-slate-900">Marketing Tips</p>
+            <p class="text-xs text-slate-400">Weekly tips &amp; insights</p>
+          </div>
+          <div class="toggle-track" onclick="toggleSwitch(this)">
+            <div class="toggle-thumb"></div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- App Preferences -->
+    <div class="bg-white rounded-2xl p-5 shadow-card border border-slate-100">
+      <h2 class="text-sm font-semibold text-slate-500 uppercase tracking-wide mb-4">Preferences</h2>
+      <div class="space-y-4">
+
+        <div class="flex items-center justify-between">
+          <div>
+            <p class="text-sm font-semibold text-slate-900">Default Posting Time</p>
+            <p class="text-xs text-slate-400">Schedule posts at optimal times</p>
+          </div>
+          <select class="text-xs font-semibold bg-slate-50 border border-slate-200 rounded-lg px-2 py-1.5 text-slate-700 focus:ring-2 focus:ring-indigo-500/30 focus:border-indigo-500">
+            <option>9:00 AM</option>
+            <option selected>12:00 PM</option>
+            <option>3:00 PM</option>
+            <option>6:00 PM</option>
+            <option>8:00 PM</option>
+          </select>
+        </div>
+
+        <div class="border-t border-slate-100"></div>
+
+        <div class="flex items-center justify-between">
+          <div>
+            <p class="text-sm font-semibold text-slate-900">Language</p>
+            <p class="text-xs text-slate-400">App interface language</p>
+          </div>
+          <select class="text-xs font-semibold bg-slate-50 border border-slate-200 rounded-lg px-2 py-1.5 text-slate-700 focus:ring-2 focus:ring-indigo-500/30 focus:border-indigo-500">
+            <option selected>English</option>
+            <option>Bahasa Melayu</option>
+            <option>中文</option>
+          </select>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Danger Zone -->
+    <div class="bg-white rounded-2xl p-5 shadow-card border border-red-100">
+      <h2 class="text-sm font-semibold text-red-500 uppercase tracking-wide mb-4">Account</h2>
+      <div class="space-y-3">
+        <button class="w-full flex items-center justify-between py-2.5 px-3 bg-red-50 rounded-xl hover:bg-red-100 active:scale-[0.98] transition-all duration-150">
+          <div class="flex items-center gap-3">
+            <i data-lucide="log-out" style="width:18px;height:18px;stroke-width:1.5;color:#EF4444;"></i>
+            <span class="text-sm font-semibold text-red-600">Sign Out</span>
+          </div>
+          <i data-lucide="chevron-right" style="width:16px;height:16px;stroke-width:1.5;color:#EF4444;"></i>
+        </button>
+
+        <div class="border-t border-red-100"></div>
+
+        <button class="w-full flex items-center justify-between py-2.5 px-3 rounded-xl hover:bg-slate-50 active:scale-[0.98] transition-all duration-150">
+          <div class="flex items-center gap-3">
+            <i data-lucide="trash-2" style="width:18px;height:18px;stroke-width:1.5;color:#94A3B8;"></i>
+            <span class="text-sm font-semibold text-slate-400">Delete Account</span>
+          </div>
+          <i data-lucide="chevron-right" style="width:16px;height:16px;stroke-width:1.5;color:#CBD5E1;"></i>
+        </button>
+      </div>
+    </div>
+
+    <!-- App Version -->
+    <div class="text-center pb-4">
+      <p class="text-xs text-slate-300">PostSaja v1.0.0</p>
+    </div>
+
   </section>
-
-  <!-- Post Saja CTA -->
-  <div class="pt-2">
-    <button id="postBtn" class="w-full h-14 rounded-2xl text-white font-bold text-lg shadow-btn hover:-translate-y-0.5 active:translate-y-0 transition-all duration-200 flex items-center justify-center gap-2" style="background:linear-gradient(135deg, #4F46E5, #7C3AED);">
-      Post Saja!
-      <i data-lucide="rocket" style="width:22px;height:22px;stroke-width:2;"></i>
-    </button>
-  </div>
 
 </main>
 
 <!-- ===== BOTTOM NAV ===== -->
 <nav class="fixed bottom-0 left-0 right-0 z-50 flex justify-around items-center px-2 py-1 safe-bottom bg-white/90 backdrop-blur-md border-t border-slate-100" style="border-radius:16px 16px 0 0;">
-  <a class="nav-item flex flex-col items-center justify-center px-3 py-1.5 rounded-full transition-all duration-150 active:scale-90" href="#" style="background:linear-gradient(135deg, #EEF2FF, #EEF2FF);">
+  <a class="nav-item flex flex-col items-center justify-center px-3 py-1.5 rounded-full transition-all duration-150 active:scale-90 cursor-pointer" onclick="switchPage('create')" data-page="create" style="background:linear-gradient(135deg, #EEF2FF, #EEF2FF);">
     <i data-lucide="circle-plus" style="width:22px;height:22px;stroke-width:1.5;color:#4F46E5;"></i>
     <span class="text-xs font-semibold mt-0.5" style="color:#4F46E5;">Create</span>
   </a>
-  <a class="nav-item flex flex-col items-center justify-center px-3 py-1.5 rounded-full text-slate-400 hover:text-slate-600 transition-all duration-150 active:scale-90" href="#">
-    <i data-lucide="clock-arrow-up" style="width:20px;height:20px;stroke-width:1.5;"></i>
+  <a class="nav-item flex flex-col items-center justify-center px-3 py-1.5 rounded-full text-slate-400 hover:text-slate-600 transition-all duration-150 active:scale-90 cursor-pointer" onclick="switchPage('history')" data-page="history">
+    <div class="relative">
+      <i data-lucide="clock-arrow-up" style="width:20px;height:20px;stroke-width:1.5;"></i>
+    </div>
     <span class="text-xs font-medium mt-0.5">History</span>
   </a>
-  <a class="nav-item flex flex-col items-center justify-center px-3 py-1.5 rounded-full text-slate-400 hover:text-slate-600 transition-all duration-150 active:scale-90" href="#">
-    <i data-lucide="file-text" style="width:20px;height:20px;stroke-width:1.5;"></i>
+  <a class="nav-item flex flex-col items-center justify-center px-3 py-1.5 rounded-full text-slate-400 hover:text-slate-600 transition-all duration-150 active:scale-90 cursor-pointer" onclick="switchPage('drafts')" data-page="drafts">
+    <div class="relative">
+      <i data-lucide="file-text" style="width:20px;height:20px;stroke-width:1.5;"></i>
+    </div>
     <span class="text-xs font-medium mt-0.5">Drafts</span>
   </a>
-  <a class="nav-item flex flex-col items-center justify-center px-3 py-1.5 rounded-full text-slate-400 hover:text-slate-600 transition-all duration-150 active:scale-90" href="#">
+  <a class="nav-item flex flex-col items-center justify-center px-3 py-1.5 rounded-full text-slate-400 hover:text-slate-600 transition-all duration-150 active:scale-90 cursor-pointer" onclick="switchPage('settings')" data-page="settings">
     <i data-lucide="settings" style="width:20px;height:20px;stroke-width:1.5;"></i>
     <span class="text-xs font-medium mt-0.5">Settings</span>
   </a>
@@ -218,7 +768,38 @@ tailwind.config = {
 
 <!-- ===== SCRIPTS ===== -->
 <script>
-  // Channel toggle with indigo active state
+  // === Page Switching ===
+  function switchPage(pageId) {
+    // Hide all pages
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+
+    // Show target page
+    const target = document.getElementById('page-' + pageId);
+    if (target) target.classList.add('active');
+
+    // Update nav active state
+    document.querySelectorAll('.nav-item').forEach(item => {
+      const isActive = item.dataset.page === pageId;
+      item.style.background = isActive ? 'linear-gradient(135deg, #EEF2FF, #EEF2FF)' : 'transparent';
+      const icon = item.querySelector('[data-lucide]');
+      const span = item.querySelector('span');
+      if (isActive) {
+        if (icon) { icon.style.color = '#4F46E5'; icon.style.strokeWidth = '1.5'; }
+        if (span) { span.style.color = '#4F46E5'; span.classList.remove('font-medium'); span.classList.add('font-semibold'); }
+      } else {
+        if (icon) { icon.style.color = '#94A3B8'; icon.style.strokeWidth = '1.5'; }
+        if (span) { span.style.color = '#94A3B8'; span.classList.remove('font-semibold'); span.classList.add('font-medium'); }
+      }
+    });
+
+    // Recreate icons for the newly shown page
+    if (typeof lucide !== 'undefined') lucide.createIcons();
+
+    // Scroll to top on page switch
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  // === Channel Toggle ===
   function toggleChannel(btn) {
     btn.classList.toggle('active-channel');
     const check = btn.querySelector('.check-icon');
@@ -231,7 +812,87 @@ tailwind.config = {
     }
   }
 
-  // AI Tweak simulation
+  // === Toggle Switch ===
+  function toggleSwitch(el) {
+    el.classList.toggle('active');
+  }
+
+  // === Delete Draft ===
+  function deleteDraft(btn) {
+    const draftItem = btn.closest('.draft-item');
+    if (draftItem) {
+      draftItem.style.transition = 'all 0.2s ease';
+      draftItem.style.opacity = '0';
+      draftItem.style.transform = 'translateX(20px)';
+      setTimeout(() => {
+        draftItem.remove();
+        // Show empty state if no drafts left
+        const remaining = document.querySelectorAll('.draft-item').length;
+        if (remaining === 0) {
+          document.getElementById('draftsEmpty').classList.remove('hidden');
+        }
+      }, 200);
+    }
+  }
+
+  // === Media Upload ===
+  let mediaFiles = [];
+  function handleMediaUpload(event) {
+    const files = event.target.files;
+    if (!files.length) return;
+
+    const previewsContainer = document.getElementById('mediaPreviews');
+    previewsContainer.classList.remove('hidden');
+
+    for (let file of files) {
+      mediaFiles.push(file);
+      const reader = new FileReader();
+      const thumbId = 'media-' + Date.now() + '-' + Math.random().toString(36).substr(2, 5);
+
+      reader.onload = function(e) {
+        const isVideo = file.type.startsWith('video/');
+        const div = document.createElement('div');
+        div.id = thumbId;
+        div.className = 'relative flex-shrink-0 w-16 h-16 rounded-xl overflow-hidden border border-slate-200';
+
+        if (isVideo) {
+          div.innerHTML = '<video src="' + e.target.result + '" class="w-full h-full object-cover"></video>' +
+            '<div class="absolute bottom-0.5 right-0.5 w-4 h-4 bg-black/60 rounded flex items-center justify-center">' +
+            '<i data-lucide="play" style="width:10px;height:10px;stroke-width:2.5;color:white;"></i></div>';
+        } else {
+          div.innerHTML = '<img src="' + e.target.result + '" class="w-full h-full object-cover"/>';
+        }
+
+        div.innerHTML += '<button class="absolute top-0.5 right-0.5 w-5 h-5 bg-red-500 rounded-full flex items-center justify-center hover:bg-red-600 active:scale-90" onclick="removeMedia(\'' + thumbId + '\')">' +
+          '<i data-lucide="x" style="width:12px;height:12px;stroke-width:2.5;color:white;"></i></button>';
+
+        previewsContainer.appendChild(div);
+        if (typeof lucide !== 'undefined') lucide.createIcons();
+      };
+      reader.readAsDataURL(file);
+    }
+
+    // Reset input to allow re-selecting same files
+    event.target.value = '';
+  }
+
+  function removeMedia(thumbId) {
+    const el = document.getElementById(thumbId);
+    if (el) {
+      el.style.transition = 'all 0.2s ease';
+      el.style.opacity = '0';
+      el.style.transform = 'scale(0.8)';
+      setTimeout(() => {
+        el.remove();
+        const remaining = document.querySelectorAll('#mediaPreviews > div').length;
+        if (remaining === 0) {
+          document.getElementById('mediaPreviews').classList.add('hidden');
+        }
+      }, 200);
+    }
+  }
+
+  // === AI Tweak Simulation ===
   const aiBtn = document.getElementById('aiTweakBtn');
   const captionInput = document.getElementById('captionInput');
 
@@ -267,7 +928,28 @@ tailwind.config = {
     });
   }
 
-  // Post Saja button
+  // === Save Draft ===
+  document.getElementById('saveDraftBtn').addEventListener('click', () => {
+    const caption = captionInput.value.trim();
+    if (!caption && mediaFiles.length === 0) {
+      alert('Add a caption or media before saving as draft.');
+      return;
+    }
+    const btn = document.getElementById('saveDraftBtn');
+    const orig = btn.innerHTML;
+    btn.innerHTML = '<i data-lucide="check-circle" style="width:18px;height:18px;stroke-width:2;"></i> Saved!';
+    btn.style.borderColor = '#10B981';
+    btn.style.color = '#10B981';
+    if (typeof lucide !== 'undefined') lucide.createIcons();
+    setTimeout(() => {
+      btn.innerHTML = orig;
+      btn.style.borderColor = '';
+      btn.style.color = '';
+      if (typeof lucide !== 'undefined') lucide.createIcons();
+    }, 1500);
+  });
+
+  // === Post Button ===
   document.getElementById('postBtn').addEventListener('click', () => {
     const channels = document.querySelectorAll('.channel-btn.active-channel');
     if (channels.length === 0) {
