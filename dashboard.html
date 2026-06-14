@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0, viewport-fit=cover" name="viewport"/>
+<title>PostSaja — Dashboard</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script>
+tailwind.config = {
+  darkMode: "class",
+  theme: {
+    extend: {
+      colors: {
+        brand: {
+          bg: "#F8FAFC",
+          surface: "#FFFFFF",
+          primary: "#4F46E5",
+          "primary-light": "#EEF2FF",
+          secondary: "#7C3AED",
+          text: "#0F172A",
+          muted: "#64748B",
+          accent: "#10B981",
+          border: "#E2E8F0",
+        }
+      },
+      fontFamily: {
+        sans: ["Plus Jakarta Sans", "-apple-system", "BlinkMacSystemFont", "sans-serif"],
+      },
+      borderRadius: {
+        xl: "12px",
+        "2xl": "16px",
+      },
+      boxShadow: {
+        "card": "0 4px 20px -2px rgba(79, 70, 229, 0.10)",
+        "card-hover": "0 10px 25px -5px rgba(79, 70, 229, 0.15), 0 8px 10px -6px rgba(79, 70, 229, 0.10)",
+        "btn": "0 4px 14px 0 rgba(79, 70, 229, 0.30)",
+      }
+    }
+  }
+}
+</script>
+<style>
+  body {
+    font-family: "Plus Jakarta Sans", -apple-system, BlinkMacSystemFont, sans-serif;
+    background: #F8FAFC;
+    color: #0F172A;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    min-height: 100dvh;
+  }
+
+  .glass-header {
+    background: rgba(248, 250, 252, 0.80);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(226, 232, 240, 0.50);
+  }
+
+  .active-channel {
+    border-color: #4F46E5 !important;
+    background-color: #EEF2FF !important;
+  }
+
+  .active-channel .check-icon {
+    color: #4F46E5 !important;
+  }
+
+  .safe-bottom {
+    padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 8px);
+  }
+
+  .upload-zone:hover {
+    border-color: #4F46E5;
+    background: #F8FAFC;
+  }
+
+  @keyframes spin {
+    to { transform: rotate(360deg); }
+  }
+  .lucide-spin {
+    animation: spin 1s linear infinite;
+  }
+</style>
+</head>
+<body>
+
+<!-- ===== TOP BAR (Glassmorphism) ===== -->
+<header class="glass-header fixed top-0 left-0 right-0 z-50 h-14 flex items-center justify-between px-4">
+  <a href="https://postsaja.com" class="flex items-center gap-2 no-underline">
+    <i data-lucide="send" style="width:22px;height:22px;stroke-width:2;color:#4F46E5;stroke-width:2.5;"></i>
+    <span class="text-lg font-extrabold tracking-tight" style="color:#0F172A;">PostSaja</span>
+  </a>
+  <div class="flex items-center gap-3">
+    <i data-lucide="bell" style="width:22px;height:22px;stroke-width:1.5;color:#64748B;" class="hover:text-slate-900 cursor-pointer transition-colors"></i>
+    <div class="w-8 h-8 rounded-full overflow-hidden border-2 border-slate-200">
+      <img alt="User" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCeFfRslRsWlaguHHSs-EYehQ2i6Cu4byi2FUGej2FTkdvrxq48zQQNADELLtvB6-Ce6vDLYPgGO-fdMJP4Qq4nmXRtD7eWiE_ZGA7yboM2czgCsRAqIHkLooXgyh4F2ON9jB8iqr7REeT1ixvqdVhnFORDKtm235ELyGtrIRrDG2CDbAD4yVl4o7sMtmeCQ86KxNRgqx9pZafhJG0WCT5n4h6FIFO0Jh3owDXxFUCl5jU3eB_vND2CQ_3J-MmgMsQkEBDkMMVer9xK"/>
+    </div>
+  </div>
+</header>
+
+<!-- ===== MAIN CONTENT ===== -->
+<main class="pt-14 pb-24 px-4 max-w-2xl mx-auto space-y-6">
+
+  <!-- Media Upload -->
+  <section class="pt-4">
+    <label class="block mb-2 text-sm font-semibold text-slate-500 uppercase tracking-wide">Content Media</label>
+    <div class="upload-zone w-full aspect-square md:aspect-video border-2 border-dashed border-slate-200 bg-white rounded-2xl flex flex-col items-center justify-center gap-3 p-6 text-center cursor-pointer transition-all duration-200 active:scale-[0.98]" onclick="alert('File picker would open here')">
+      <div class="w-16 h-16 rounded-full bg-indigo-50 flex items-center justify-center">
+        <i data-lucide="image-plus" style="width:28px;height:28px;stroke-width:1.5;color:#4F46E5;"></i>
+      </div>
+      <div>
+        <p class="text-lg font-semibold text-slate-900">Add Media</p>
+        <p class="text-sm text-slate-400 mt-1">Drag images or video here, or tap to browse</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Caption / AI Tweak Card -->
+  <div class="bg-white rounded-2xl p-5 shadow-card border border-slate-100">
+    <div class="flex items-center justify-between mb-4">
+      <span class="text-sm font-semibold text-slate-500">Product Details</span>
+      <button id="aiTweakBtn" class="flex items-center gap-1.5 px-3 py-1.5 bg-emerald-50 text-emerald-700 rounded-full text-xs font-semibold hover:bg-emerald-100 active:scale-95 transition-all duration-150">
+        <i data-lucide="wand-sparkles" style="width:16px;height:16px;stroke-width:2;"></i>
+        AI Tweak
+      </button>
+    </div>
+    <textarea id="captionInput" class="w-full min-h-[120px] bg-slate-50 border-0 rounded-xl p-3 text-sm text-slate-900 focus:ring-2 focus:ring-indigo-500/30 focus:border-indigo-500 placeholder:text-slate-400 resize-none" placeholder="What are you selling today? Describe your product or service..."></textarea>
+    <div class="mt-2 flex items-center gap-1.5 text-xs text-slate-400">
+      <i data-lucide="info" style="width:14px;height:14px;stroke-width:2;color:#94A3B8;"></i>
+      <span>Optimize for local audiences with one click.</span>
+    </div>
+  </div>
+
+  <!-- Channel Checklist -->
+  <section>
+    <h2 class="text-lg font-bold text-slate-900 mb-3">Where to post?</h2>
+    <div class="grid grid-cols-1 gap-2">
+
+      <!-- Instagram -->
+      <button class="channel-btn flex items-center justify-between p-4 bg-white border border-slate-200 rounded-xl transition-all duration-150 active:scale-[0.98] hover:shadow-card" onclick="toggleChannel(this)">
+        <div class="flex items-center gap-4">
+          <div class="w-10 h-10 rounded-xl bg-pink-50 flex items-center justify-center">
+            <i data-lucide="camera" style="width:20px;height:20px;stroke-width:1.5;color:#E1306C;"></i>
+          </div>
+          <span class="text-sm font-semibold text-slate-900">Instagram</span>
+        </div>
+        <i data-lucide="circle-check" class="check-icon" style="width:20px;height:20px;stroke-width:1.5;color:#CBD5E1;"></i>
+      </button>
+
+      <!-- TikTok -->
+      <button class="channel-btn flex items-center justify-between p-4 bg-white border border-slate-200 rounded-xl transition-all duration-150 active:scale-[0.98] hover:shadow-card" onclick="toggleChannel(this)">
+        <div class="flex items-center gap-4">
+          <div class="w-10 h-10 rounded-xl bg-slate-100 flex items-center justify-center">
+            <i data-lucide="music" style="width:20px;height:20px;stroke-width:1.5;color:#0F172A;"></i>
+          </div>
+          <span class="text-sm font-semibold text-slate-900">TikTok</span>
+        </div>
+        <i data-lucide="circle-check" class="check-icon" style="width:20px;height:20px;stroke-width:1.5;color:#CBD5E1;"></i>
+      </button>
+
+      <!-- Google Business -->
+      <button class="channel-btn flex items-center justify-between p-4 bg-white border border-slate-200 rounded-xl transition-all duration-150 active:scale-[0.98] hover:shadow-card" onclick="toggleChannel(this)">
+        <div class="flex items-center gap-4">
+          <div class="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center">
+            <i data-lucide="store" style="width:20px;height:20px;stroke-width:1.5;color:#4285F4;"></i>
+          </div>
+          <span class="text-sm font-semibold text-slate-900">Google Business</span>
+        </div>
+        <i data-lucide="circle-check" class="check-icon" style="width:20px;height:20px;stroke-width:1.5;color:#CBD5E1;"></i>
+      </button>
+
+      <!-- Telegram -->
+      <button class="channel-btn flex items-center justify-between p-4 bg-white border border-slate-200 rounded-xl transition-all duration-150 active:scale-[0.98] hover:shadow-card" onclick="toggleChannel(this)">
+        <div class="flex items-center gap-4">
+          <div class="w-10 h-10 rounded-xl bg-sky-50 flex items-center justify-center">
+            <i data-lucide="send" style="width:20px;height:20px;stroke-width:1.5;color:#0088cc;"></i>
+          </div>
+          <span class="text-sm font-semibold text-slate-900">Telegram</span>
+        </div>
+        <i data-lucide="circle-check" class="check-icon" style="width:20px;height:20px;stroke-width:1.5;color:#CBD5E1;"></i>
+      </button>
+
+    </div>
+  </section>
+
+  <!-- Post Saja CTA -->
+  <div class="pt-2">
+    <button id="postBtn" class="w-full h-14 rounded-2xl text-white font-bold text-lg shadow-btn hover:-translate-y-0.5 active:translate-y-0 transition-all duration-200 flex items-center justify-center gap-2" style="background:linear-gradient(135deg, #4F46E5, #7C3AED);">
+      Post Saja!
+      <i data-lucide="rocket" style="width:22px;height:22px;stroke-width:2;"></i>
+    </button>
+  </div>
+
+</main>
+
+<!-- ===== BOTTOM NAV ===== -->
+<nav class="fixed bottom-0 left-0 right-0 z-50 flex justify-around items-center px-2 py-1 safe-bottom bg-white/90 backdrop-blur-md border-t border-slate-100" style="border-radius:16px 16px 0 0;">
+  <a class="nav-item flex flex-col items-center justify-center px-3 py-1.5 rounded-full transition-all duration-150 active:scale-90" href="#" style="background:linear-gradient(135deg, #EEF2FF, #EEF2FF);">
+    <i data-lucide="circle-plus" style="width:22px;height:22px;stroke-width:1.5;color:#4F46E5;"></i>
+    <span class="text-xs font-semibold mt-0.5" style="color:#4F46E5;">Create</span>
+  </a>
+  <a class="nav-item flex flex-col items-center justify-center px-3 py-1.5 rounded-full text-slate-400 hover:text-slate-600 transition-all duration-150 active:scale-90" href="#">
+    <i data-lucide="clock-arrow-up" style="width:20px;height:20px;stroke-width:1.5;"></i>
+    <span class="text-xs font-medium mt-0.5">History</span>
+  </a>
+  <a class="nav-item flex flex-col items-center justify-center px-3 py-1.5 rounded-full text-slate-400 hover:text-slate-600 transition-all duration-150 active:scale-90" href="#">
+    <i data-lucide="file-text" style="width:20px;height:20px;stroke-width:1.5;"></i>
+    <span class="text-xs font-medium mt-0.5">Drafts</span>
+  </a>
+  <a class="nav-item flex flex-col items-center justify-center px-3 py-1.5 rounded-full text-slate-400 hover:text-slate-600 transition-all duration-150 active:scale-90" href="#">
+    <i data-lucide="settings" style="width:20px;height:20px;stroke-width:1.5;"></i>
+    <span class="text-xs font-medium mt-0.5">Settings</span>
+  </a>
+</nav>
+
+<!-- ===== SCRIPTS ===== -->
+<script>
+  // Channel toggle with indigo active state
+  function toggleChannel(btn) {
+    btn.classList.toggle('active-channel');
+    const check = btn.querySelector('.check-icon');
+    if (btn.classList.contains('active-channel')) {
+      check.style.color = '#4F46E5';
+      check.style.strokeWidth = '2.5';
+    } else {
+      check.style.color = '#CBD5E1';
+      check.style.strokeWidth = '1.5';
+    }
+  }
+
+  // AI Tweak simulation
+  const aiBtn = document.getElementById('aiTweakBtn');
+  const captionInput = document.getElementById('captionInput');
+
+  if (aiBtn) {
+    aiBtn.addEventListener('click', () => {
+      const text = captionInput.value.trim();
+      if (!text) {
+        captionInput.focus();
+        captionInput.style.borderColor = '#4F46E5';
+        captionInput.style.boxShadow = '0 0 0 3px rgba(79,70,229,0.10)';
+        setTimeout(() => {
+          captionInput.style.borderColor = '';
+          captionInput.style.boxShadow = '';
+        }, 2000);
+        return;
+      }
+
+      const origHtml = aiBtn.innerHTML;
+      aiBtn.disabled = true;
+      aiBtn.innerHTML = '<i data-lucide="loader-circle" style="width:16px;height:16px;stroke-width:2;" class="lucide-spin"></i> Optimizing...';
+      aiBtn.classList.remove('bg-emerald-50', 'text-emerald-700');
+      aiBtn.classList.add('bg-indigo-50', 'text-indigo-600');
+      if (typeof lucide !== 'undefined') lucide.createIcons();
+
+      setTimeout(() => {
+        captionInput.value = "🔥 LIMITED OFFER: " + text + "\n\nVisit us today! #SupportLocal #DealOfTheDay";
+        aiBtn.innerHTML = origHtml;
+        aiBtn.disabled = false;
+        aiBtn.classList.remove('bg-indigo-50', 'text-indigo-600');
+        aiBtn.classList.add('bg-emerald-50', 'text-emerald-700');
+        if (typeof lucide !== 'undefined') lucide.createIcons();
+      }, 1200);
+    });
+  }
+
+  // Post Saja button
+  document.getElementById('postBtn').addEventListener('click', () => {
+    const channels = document.querySelectorAll('.channel-btn.active-channel');
+    if (channels.length === 0) {
+      alert('Please select at least one channel to post.');
+      return;
+    }
+    const caption = captionInput.value.trim();
+    if (!caption) {
+      alert('Please write a product description first.');
+      return;
+    }
+
+    const btn = document.getElementById('postBtn');
+    const orig = btn.innerHTML;
+    btn.innerHTML = '<i data-lucide="loader-circle" style="width:22px;height:22px;stroke-width:2;" class="lucide-spin"></i> Posting...';
+    btn.style.opacity = '0.7';
+    btn.disabled = true;
+    if (typeof lucide !== 'undefined') lucide.createIcons();
+
+    setTimeout(() => {
+      btn.innerHTML = '<i data-lucide="circle-check" style="width:22px;height:22px;stroke-width:2.5;color:#fff;"></i> Posted!';
+      btn.style.background = 'linear-gradient(135deg, #10B981, #059669)';
+      btn.style.opacity = '1';
+      btn.disabled = false;
+      if (typeof lucide !== 'undefined') lucide.createIcons();
+
+      setTimeout(() => {
+        btn.innerHTML = orig;
+        btn.style.background = 'linear-gradient(135deg, #4F46E5, #7C3AED)';
+        if (typeof lucide !== 'undefined') lucide.createIcons();
+      }, 2000);
+    }, 1500);
+  });
+</script>
+
+<!-- Lucide Icons -->
+<script src="https://unpkg.com/lucide@latest"></script>
+<script>
+  if (typeof lucide !== 'undefined') lucide.createIcons();
+</script>
+
+</body>
+</html>
