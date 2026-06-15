@@ -396,8 +396,8 @@ tailwind.config = {
         </div>
       </div>
 
-      <!-- Item 4 -->
-      <div class="history-item stagger-item bg-white rounded-2xl p-4 shadow-card border border-slate-100 transition-all duration-150 cursor-pointer hover:shadow-card-hover" style="animation-delay:0.15s;">
+      <!-- Item 4 (hidden until Load More) -->
+      <div class="history-item hidden-history bg-white rounded-2xl p-4 shadow-card border border-slate-100 transition-all duration-150 cursor-pointer hover:shadow-card-hover" style="display:none;animation-delay:0.15s;">
         <div class="flex gap-3">
           <div class="w-14 h-14 rounded-xl bg-gradient-to-br from-emerald-400 to-teal-300 flex-shrink-0 overflow-hidden">
             <img alt="Media" class="w-full h-full object-cover" src="https://images.unsplash.com/photo-1590004953392-5f89d137c8d5?w=80&h=80&fit=crop"/>
@@ -423,8 +423,8 @@ tailwind.config = {
         </div>
       </div>
 
-      <!-- Item 5 -->
-      <div class="history-item stagger-item bg-white rounded-2xl p-4 shadow-card border border-slate-100 transition-all duration-150 cursor-pointer hover:shadow-card-hover" style="animation-delay:0.2s;">
+      <!-- Item 5 (hidden until Load More) -->
+      <div class="history-item hidden-history bg-white rounded-2xl p-4 shadow-card border border-slate-100 transition-all duration-150 cursor-pointer hover:shadow-card-hover" style="display:none;animation-delay:0.2s;">
         <div class="flex gap-3">
           <div class="w-14 h-14 rounded-xl bg-gradient-to-br from-violet-400 to-purple-300 flex-shrink-0 overflow-hidden">
             <img alt="Media" class="w-full h-full object-cover" src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=80&h=80&fit=crop"/>
@@ -450,6 +450,20 @@ tailwind.config = {
         </div>
       </div>
 
+    </div>
+
+    <!-- Load More -->
+    <div id="historyLoadMore" class="flex justify-center pt-2 pb-4">
+      <button onclick="loadMoreHistory()" class="inline-flex items-center gap-2 px-6 py-3 bg-white border border-slate-200 rounded-2xl text-sm font-semibold text-slate-600 hover:bg-slate-50 hover:shadow-card active:scale-95 transition-all duration-200">
+        <i data-lucide="chevron-down" style="width:18px;height:18px;stroke-width:2;"></i>
+        Load More
+      </button>
+    </div>
+    <div id="historyShowLess" class="flex justify-center pt-2 pb-4" style="display:none;">
+      <button onclick="showLessHistory()" class="inline-flex items-center gap-2 px-6 py-3 bg-white border border-slate-200 rounded-2xl text-sm font-semibold text-slate-400 hover:bg-slate-50 active:scale-95 transition-all duration-200">
+        <i data-lucide="chevron-up" style="width:18px;height:18px;stroke-width:2;"></i>
+        Show Less
+      </button>
     </div>
 
   </section>
@@ -1281,6 +1295,29 @@ tailwind.config = {
       ? '<i data-lucide="eye-off" style="width:18px;height:18px;stroke-width:1.5;color:#94A3B8;"></i>'
       : '<i data-lucide="eye" style="width:18px;height:18px;stroke-width:1.5;color:#94A3B8;"></i>';
     if (typeof lucide !== 'undefined') lucide.createIcons();
+  }
+
+  // === History Load More ===
+  function loadMoreHistory() {
+    document.querySelectorAll('.hidden-history').forEach((el, i) => {
+      el.style.display = '';
+      el.style.animation = 'fadeSlideUp 0.3s ease forwards';
+      el.style.animationDelay = (i * 0.05) + 's';
+      el.style.opacity = '0';
+    });
+    document.getElementById('historyLoadMore').style.display = 'none';
+    document.getElementById('historyShowLess').style.display = 'flex';
+    document.getElementById('historyCount').textContent = '5';
+  }
+
+  function showLessHistory() {
+    document.querySelectorAll('.hidden-history').forEach(el => {
+      el.style.display = 'none';
+      el.style.opacity = '0';
+    });
+    document.getElementById('historyLoadMore').style.display = 'flex';
+    document.getElementById('historyShowLess').style.display = 'none';
+    document.getElementById('historyCount').textContent = '3';
   }
 
   // === Channel Toggle ===
